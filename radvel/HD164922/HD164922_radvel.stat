@@ -1,0 +1,7 @@
+[fit]
+run = True
+postfile = HD164922/HD164922_post_obj.pkl
+
+[plot]
+rv_plot = HD164922/HD164922_rv_multipanel.pdf
+
