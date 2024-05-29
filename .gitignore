@@ -4,3 +4,6 @@ datasets
 # ignore test and tesp
 tesp
 test
+
+# ignore PolyChordLite
+PolyChordLite
