@@ -1,2 +1,6 @@
 # ignore dataset
 datasets
+
+# ignore test and tesp
+tesp
+test
