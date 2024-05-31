@@ -1,12 +1,13 @@
+import pickle
 import pandas as pd
 
-def clean_data(espresso_path: str, harps_path: str):
+def clean_and_pickle(espresso_path: str, harps_path: str, pickle_path: str):
     """
-    Clean the data from the ESPRESSO and HARPS instruments.
+    Clean and pickle the data from the ESPRESSO and HARPS instruments.
     """
 
 
-    ## HARPS
+    # --- HARPS
     # Column titles
     column_titles = [
     'Time', 'RV', 'e_RV', 'Halpha', 'e_Halpha', 'Hbeta', 'e_Hbeta', 'Hgamma', 'e_Hgamma', 'NaD', 'e_NaD',
@@ -31,7 +32,7 @@ def clean_data(espresso_path: str, harps_path: str):
     cleaned_harps_df['BIS'] = cleaned_harps_df['BIS'].replace('---', 0).astype(float).interpolate(method='linear')
 
 
-    ## ESPRESSO
+    # --- ESPRESSO
     # Column titles
     espresso_column_titles = [
             'Time', 'RV', 'e_RV', 'FWHM', 'e_FWHM', 'BIS', 'e_BIS', 'Contrast', 'e_Contrast', 'Sindex', 'e_Sindex', 
@@ -57,8 +58,13 @@ def clean_data(espresso_path: str, harps_path: str):
     cleaned_pre_df = cleaned_espresso_df[cleaned_espresso_df['Inst'] == 'Pre']
     cleaned_post_df = cleaned_espresso_df[cleaned_espresso_df['Inst'] == 'Post']
 
+    # --- Organise data for pickling
+    data_dict = {
+        'ESPRESSO_pre': cleaned_pre_df,
+        'ESPRESSO_post': cleaned_post_df,
+        'HARPS': cleaned_harps_df
+    }
 
-    ## Merge the data
-    combined_df = pd.concat([cleaned_espresso_df, harps_df], axis=0, ignore_index=True)
-
-    return combined_df, harps_df, cleaned_harps_df, espresso_df, cleaned_espresso_df, cleaned_pre_df, cleaned_post_df
+    # Save to pickle
+    with open(pickle_path, 'wb') as handle:
+        pickle.dump(data_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
