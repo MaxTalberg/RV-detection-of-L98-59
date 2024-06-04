@@ -1,0 +1,125 @@
+J/A+A/629/A111      L 98-59 (TOI 175) HARPS observations       (Cloutier+, 2019)
+================================================================================
+Characterization of the L 98-59 multi-planetary system with HARPS:
+Mass characterization of a hot super-Earth, a sub-Neptune, and a mass upper
+limit on the third planet.
+    Cloutier R., Astudillo-Defru N., Bonfils X., Jenkins J.S., Berdinas Z.,
+    Ricker G., Vanderspek R., Latham D.W., Seager S., Winn J., Jenkins J.M.,
+    Almenara J.M., Bouchy F., Delfosse X., Diaz M.R., Diaz R.F., Doyon R.,
+    Figueira P., Forveille T., Kurtovic N.T., Lovis C., Mayor M., Menou K.,
+    Morgan E., Morris R., Muirhead P., Murgas F., Pepe F., Santos N.C.,
+    Segransan D., Smith J.C., Tenenbaum P., Torres G., Udry S., Vezie M.,
+    Vilasenor J.
+    <Astron. Astrophys. 629, A111 (2019)>
+    =2019A&A...629A.111C        (SIMBAD/NED BibCode)
+================================================================================
+ADC_Keywords: Stars, M-type ; Stars, double and multiple ; Exoplanets ;
+              Radial velocities
+Keywords: stars: individual: L 98-59 - planetary systems - stars: low-mass -
+          planets and satellites: terrestrial planets -
+          techniques: radial velocities
+
+Abstract:
+    L 98-59 (TIC 307210830, TOI-175) is a nearby M3 dwarf around which
+    TESS revealed three small transiting planets (0.80, 1.35, 1.57 Earth
+    radii) in a compact configuration with orbital periods shorter than
+    7.5 days. Here we aim to measure the masses of the known transiting
+    planets in this system using precise radial velocity (RV) measurements
+    taken with the HARPS spectrograph. We considered both trained and
+    untrained Gaussian process regression models of stellar activity,
+    which are modeled simultaneously with the planetary signals. Our RV
+    analysis was then supplemented with dynamical simulations to provide
+    strong constraints on the planets' orbital eccentricities by requiring
+    long-term stability. We measure the planet masses of the two outermost
+    planets to be 2.42+/-0.35 and 2.31+/-0.46 Earth masses, which confirms
+    the bulk terrestrial composition of the former and eludes to a
+    significant radius fraction in an extended gaseous envelope for the
+    latter. We are able to place an upper limit on the mass of the
+    smallest, innermost planet of <1.01 Earth masses with 95% confidence.
+    Our RV plus dynamical stability analysis places strong constraints on
+    the orbital eccentricities and reveals that each planet's orbit likely
+    has e<0.1. L 98-59 is likely a compact system of two rocky planets
+    plus a third outer planet with a lower bulk density possibly
+    indicative of the planet having retained a modest atmosphere. The
+    system offers a unique laboratory for studies of planet formation,
+    dynamical stability, and comparative atmospheric planetology as the
+    two outer planets are attractive targets for atmospheric
+    characterization through transmission spectroscopy. Continued RV
+    monitoring will help refine the characterization of the innermost
+    planet and potentially reveal additional planets in the system at
+    wider separations.
+
+Description:
+    HARPS spectroscopic time-series of L 98-59 including radial velocities
+    and spectroscopic activity indices.
+
+Objects:
+    --------------------------------------------------
+       RA   (ICRS)   DE        Designation(s)
+    --------------------------------------------------
+    08 18 07.62  -68 18 46.8   L 98-59 = TOI 175
+    --------------------------------------------------
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+harps.dat         89      165   HARPS time-series
+t175samp.dat     206    10000   MCMC posterior samples
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: harps.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1- 11  F11.6 d       Time      Timestamp (BJD-2457000)
+  13- 19  F7.1  m/s     RV        Radial velocity
+  21- 23  F3.1  m/s   e_RV        Radial velocity uncertainty
+  25- 28  F4.2  10-2    Halpha    H-alpha index multiplied by 100
+  30- 33  F4.2  10-2  e_Halpha    H-alpha index uncertainty
+  35- 38  F4.2  10-2    Hbeta     H-beta index multiplied by 100
+  40- 43  F4.2  10-2  e_Hbeta     H-beta index uncertainty
+  45- 49  F5.2  10-2    Hgamma    H-gamma index multiplied by 100
+  51- 54  F4.2  10-2  e_Hgamma    H-gamma index uncertainty
+  56- 59  F4.2  ---     NaD       Sodium doublet index
+  61- 64  F4.2  ---   e_NaD       Sodium doublet index uncertainty
+  66- 69  F4.2  ---     Sindex    S-index
+  71- 74  F4.2  ---   e_Sindex    S-index uncertainty
+  76- 81  F6.4  ---     FWHM      ? Full width at half maximum of the
+                                   cross-correlation function
+  83- 89  F7.4  ---     BIS       ? Bisector of the cross-correlation function
+--------------------------------------------------------------------------------
+
+Byte-by-byte Description of file: t175samp.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1-  8  F8.6  m/s     lna       GP covariance amplitude
+  10- 18  F9.6  d       lnlambda  GP expontential timescale
+  20- 28  F9.6  ---     lnGamma   GP coherence
+  30- 37  F8.6  d       lnPGP     GP periodic timescale
+  39- 46  F8.6  m/s     s         RV jitter
+  48- 56  F9.6  m/s     gamma0    Systemic velocity
+  58- 65  F8.6  d       Pb        L 98-59b orbital period
+  67- 77  F11.6 d       T0b       L 98-59b mid-transit time ((BJD-2457000)
+  79- 86  F8.6  m/s     Kb        L 98-59b semi-amplitude
+  88- 96  F9.6  ---     hb        L 98-59b h = sqrt(ecc)*cos(omega)
+  98-106  F9.6  ---     kb        L 98-59b k = sqrt(ecc)*sin(omega)
+ 108-115  F8.6  d       Pc        L 98-59c orbital period
+ 117-127  F11.6 d       T0c       L 98-59c mid-transit time (BJD-2457000)
+ 129-136  F8.6  m/s     Kc        L 98-59c semi-amplitude
+ 138-146  F9.6  ---     hc        L 98-59c h = sqrt(ecc)*cos(omega)
+ 148-156  F9.6  ---     kc        L 98-59c k = sqrt(ecc)*sin(omega)
+ 158-165  F8.6  d       Pd        L 98-59d orbital period
+ 167-177  F11.6 d       T0d       L 98-59d mid-transit time (BJD-2457000)
+ 179-186  F8.6  m/s     Kd        L 98-59d semi-amplitude
+ 188-196  F9.6  ---     hd        L 98-59d h = sqrt(ecc)*cos(omega)
+ 198-206  F9.6  ---     kd        L 98-59d k = sqrt(ecc)*sin(omega)
+--------------------------------------------------------------------------------
+
+Acknowledgements:
+    Ryan Cloutier, cloutier(at)astro.utoronto.ca
+
+================================================================================
+(End)  Ryan Cloutier [Toronto], Patricia Vannier [CDS]               02-Sep-2019
