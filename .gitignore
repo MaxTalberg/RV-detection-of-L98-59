@@ -7,3 +7,10 @@ test
 
 # ignore PolyChordLite
 PolyChordLite
+
+# ignore PolyChord chains
+notebooks/chain/
+src/chain/
+
+# ignore output dir
+notebooks/L9858_
