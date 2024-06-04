@@ -13,4 +13,6 @@ notebooks/chain/
 src/chain/
 
 # ignore output dir
-notebooks/L9858_
+notebooks/L98_59_aldo/
+src/L98_59_aldo/
+src/__pycache__/

@@ -18,7 +18,7 @@ from pypolychord.settings import PolyChordSettings
 src_dir = os.path.join(os.path.dirname(os.getcwd()), 'src')
 sys.path.append(src_dir)
 import prior_transforms as pt
-from utils import load_data_from_pickle, scale_and_offset
+from utils import load_data_from_pickle
 
 # --- Parameter configuration
 INCLUDE_PLANET_B = True
