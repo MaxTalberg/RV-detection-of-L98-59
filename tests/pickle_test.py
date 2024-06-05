@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 import unittest
-from utils import load_data_from_pickle
+from pickle_data import load_data_from_pickle
 
 class TestUtils(unittest.TestCase):
     def test_data_loading(self):
