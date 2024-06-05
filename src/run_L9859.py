@@ -1,6 +1,7 @@
 
 # --- Imports
-
+import warnings
+from contextlib import contextmanager
 import os
 import re
 import sys
@@ -123,6 +124,7 @@ def derived_params(q):
     T_start = min(adjusted_time_RV)
     T_end = max(adjusted_time_RV)
 
+
     # --- Derived parameters
 
     # planet b
@@ -137,6 +139,8 @@ def derived_params(q):
     # planet d
     e_d = np.sqrt(q[Q['secosw_d']]**2 + q[Q['sesinw_d']]**2)
     Tc_d = q[Q['phi_d']] * (T_end - T_start) + T_start
+
+
 
     if INCLUDE_PLANET_B:
         return [e_b, Tc_b, e_c, Tc_c, e_d, Tc_d]
@@ -215,6 +219,7 @@ def myprior(q):
     qq[Q['sigma_RV_post']] = pt.uniform(q[Q['sigma_RV_post']], 0, max_jitter_post)  # U(0, max_jitter_post)
     qq[Q['v0_pre']] = pt.gaussian(q[Q['v0_pre']], -5579.1, 0.0035)  # N(-5579.1, 0.0035)
     qq[Q['off_post']] = pt.gaussian(q[Q['off_post']], 2.88, 4.8)    # N(2.88, 4.8)
+    qq[Q['off_harps']] = pt.gaussian(q[Q['off_harps']], -99.5, 5.0)  # N(-99.5, 5.0)
 
     # planet priors
     qq = planet_prior(qq)
@@ -223,15 +228,13 @@ def myprior(q):
 
 def mean_fxn(T0, q):
     Y0 = np.zeros(T0.shape)
+
     # ESPRESSO pre offset
     Y0[0:n_pre] += q[Q['v0_pre']]
-
     # ESPRESSO post offset
     Y0[n_pre:n_pre + n_post] += q[Q['v0_pre']] + q[Q['off_post']]
-
     # HARPS offset
-    Y0[n_pre + n_post:] += q[Q['v0_pre']] + q[Q['off_post']]
-
+    Y0[n_pre + n_post:] += q[Q['v0_pre']] + q[Q['off_harps']]
     # Compute the RV model with corrected offsets
     Y0 += compute_planets_RV(T0, q)
     return Y0
@@ -244,7 +247,10 @@ def myloglike(theta):
     derived_vals = derived_params(q)
 
     # Compute the GP covariance matrix
-    log_period = np.log(1.0 / q[Q['P_rot']])
+    log_period = np.log(1.0 / q[Q['P_rot']])    # frequency = 1 / period
+
+    #print("Log period (frequency = 1 / P_rot):", log_period)
+    #log_period = np.log(q[Q['P_rot']])
     K_trial = q[Q['A_RV']]**2 * kernels.ExpSine2Kernel(gamma=q[Q['gamma']], log_period=log_period) * kernels.ExpSquaredKernel(metric=q[Q['t_decay']]**2)
     gp = george.GP(K_trial)
 
@@ -259,7 +265,7 @@ def myloglike(theta):
     gp.compute(adjusted_time_RV, err_RV)
 
     # Compute the RV model and residuals
-    mu_RV = mean_fxn(np.array(adjusted_time_RV), q)
+    mu_RV = mean_fxn(adjusted_time_RV, q)
     residuals = obs_RV - mu_RV
 
     # Compute the log likelihood
@@ -280,7 +286,7 @@ algorithm_params = {'do_clustering': True,
                     'precision_criterion': 10,
                     'num_repeats': 1,
                     'read_resume': False,
-                    'nprior': 50,
+                    'nprior': 500,
                     'nfail': 5000,
                     }
 
