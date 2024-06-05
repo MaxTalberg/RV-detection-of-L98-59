@@ -11,9 +11,9 @@ import prior_transforms as pt
 from config_params import nDims, nDerived, Q
 from config_data import err_harps, err_post, err_pre, adjusted_time_RV, obs_RV, max_jitter_post, max_jitter_pre
 
+from priors import planet_prior
 from computations import compute_derived_parameters, compute_offset
 
-from priors import planet_prior
 
 # --- Output directory
 output_dir = 'L98_59_aldo/polychord_out'
