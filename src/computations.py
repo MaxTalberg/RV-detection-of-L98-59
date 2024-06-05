@@ -2,18 +2,14 @@ import radvel
 import numpy as np
 
 from config_params import Q, INCLUDE_PLANET_B
+from config_data import adjusted_time_RV, n_pre, n_post
 
-adjusted_time_RV = np.array([
-    1408.8536609997973,
-    1930.5773693597876
-])
-
-def compute_derived_params(q):
+def compute_derived_parameters(q):
+    print(q)
 
     # Time 
     T_start = min(adjusted_time_RV)
     T_end = max(adjusted_time_RV)
-
 
     # --- Derived parameters
 
@@ -41,7 +37,7 @@ def compute_derived_params(q):
 def compute_planets_RV(T0, q):
 
     RV_total = np.zeros(len(T0))
-    derived_vals = compute_derived_params(q)
+    derived_vals = compute_derived_parameters(q)
 
     if INCLUDE_PLANET_B:
         e_b, Tc_b, e_c, Tc_c, e_d, Tc_d = derived_vals
@@ -98,8 +94,7 @@ def compute_planets_RV(T0, q):
     return RV_total
 
 def compute_offset(T0, q):
-    n_pre = 39
-    n_post = 24
+
     Y0 = np.zeros(T0.shape)
 
     # ESPRESSO pre offset

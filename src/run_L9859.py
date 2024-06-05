@@ -12,7 +12,7 @@ import prior_transforms as pt
 from config_params import nDims, nDerived, Q
 from config_data import err_harps, err_post, err_pre, adjusted_time_RV, obs_RV, max_jitter_post, max_jitter_pre
 
-from computations import compute_derived_params, compute_offset
+from computations import compute_derived_parameters, compute_offset
 
 from priors import planet_prior
 
@@ -47,7 +47,7 @@ def myloglike(theta):
     q = np.copy(theta)
 
     # Derived parameters
-    derived_vals = compute_derived_params(q)
+    derived_vals = compute_derived_parameters(q)
 
     # Compute the GP covariance matrix
     log_period = np.log(1.0 / q[Q['P_rot']])    # frequency = 1 / period

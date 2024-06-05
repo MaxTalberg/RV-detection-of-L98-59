@@ -6,7 +6,7 @@ from unittest.mock import patch, MagicMock
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-import config_data
+import config_data, config_params
 
 
 class TestConfig(unittest.TestCase):
@@ -20,18 +20,20 @@ class TestConfig(unittest.TestCase):
 
     def test_params(self):
         # Assertions to verify all parameters are loaded correctly
-        self.assertEqual(config_data.Q['A_RV'], 0)
-        self.assertEqual(config_data.Q['P_rot'], 1)
-        self.assertEqual(config_data.Q['t_decay'], 2)
-        self.assertEqual(config_data.Q['gamma'], 3)
-        if config_data.INCLUDE_PLANET_B:
-            self.assertEqual(len(config_data.Q), 34)
-            self.assertEqual(config_data.nDims, 28)
-            self.assertEqual(config_data.nDerived, 6)
+        self.assertEqual(config_params.Q['A_RV'], 0)
+        self.assertEqual(config_params.Q['P_rot'], 1)
+        self.assertEqual(config_params.Q['t_decay'], 2)
+        self.assertEqual(config_params.Q['gamma'], 3)
+        if config_params.INCLUDE_PLANET_B:
+            self.assertEqual(len(config_params.parameters), 34)
+            self.assertEqual(config_params.nDims, 28)
+            self.assertEqual(config_params.nDerived, 6)
         else:
-            self.assertEqual(len(config_data.Q), 26)
-            self.assertEqual(config_data.nDims, 22)
-            self.assertEqual(config_data.nDerived, 4)
+            self.assertEqual(len(config_params.parameters), 22)
+            self.assertEqual(config_params.nDims, 22)
+            self.assertEqual(config_params.nDerived, 4)
+        self.assertEqual(len(config_params.parameters), len(config_params.parameters_latex))
 
 if __name__ == '__main__':
     unittest.main()
+    
