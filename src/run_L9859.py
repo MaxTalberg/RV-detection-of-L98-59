@@ -6,7 +6,6 @@ import numpy as np
 from george import kernels
 from pypolychord.settings import PolyChordSettings
 
-
 import prior_transforms as pt
 
 from config_params import nDims, nDerived, Q
