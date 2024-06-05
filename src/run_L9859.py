@@ -1,3 +1,6 @@
+
+# --- Imports
+
 import os
 import re
 import sys
@@ -14,21 +17,19 @@ import pypolychord.priors as priors
 from george import kernels
 from pypolychord.settings import PolyChordSettings
 
-# Calculate the path to the src directory
-src_dir = os.path.join(os.path.dirname(os.getcwd()), 'src')
-sys.path.append(src_dir)
+
 import prior_transforms as pt
 from utils import load_data_from_pickle
 
 # --- Parameter configuration
-INCLUDE_PLANET_B = True
+INCLUDE_PLANET_B = False
 
 # --- Output directory
 output_dir = 'L98_59_aldo/polychord_out'
 cluster_dir = 'L98_59_aldo/polychord_out/clusters'
 
 # --- Import relevant data
-pickle_file_path = '../datasets/cleaned_data_20240531.pickle' 
+pickle_file_path = 'datasets/cleaned_data_20240531.pickle' 
 X = load_data_from_pickle(pickle_file_path)
 X_pre, X_post, X_harps = X['ESPRESSO_pre'], X['ESPRESSO_post'], X['HARPS']
 n_pre, n_post, n_harps = len(X_pre['RV']), len(X_post['RV']), len(X_harps['RV'])
@@ -38,6 +39,10 @@ params_general = (['A_RV', 'P_rot', 't_decay', 'gamma',
                    'sigma_RV_pre', 'sigma_RV_post', 'sigma_RV_harps',
                    'v0_pre', 'off_post', 'off_harps'])
 
+params_general_latex = (['A_{RV}', 'P_{rot}', 't_{decay}', '\\gamma',
+                    '\\sigma_{RV, pre}', '\\sigma_{RV, post}', '\\sigma_{RV, HARPS}',
+                    'v_{0, pre}', 'off_{post}', 'off_{HARPS}'])
+
 params_planet_b = (['P_b', 'secosw_b', 'sesinw_b', 'K_b', 'w*_b', 'phi_b'])
 params_planet_c = (['P_c', 'secosw_c', 'sesinw_c', 'K_c', 'w*_c', 'phi_c'])
 params_planet_d = (['P_d', 'secosw_d', 'sesinw_d', 'K_d', 'w*_d', 'phi_d'])
@@ -46,15 +51,19 @@ params_derived_b = (['e_b', 'Tc_b'])
 params_derived_c = (['e_c', 'Tc_c'])
 params_derived_d = (['e_d', 'Tc_d'])
 
+
 if INCLUDE_PLANET_B:
-    planet_params = params_general + params_planet_b + params_planet_c + params_planet_d
+    planet_params = params_planet_b + params_planet_c + params_planet_d
     derived_params = params_derived_b + params_derived_c + params_derived_d
 
 else:
     planet_params = params_planet_c + params_planet_d
     derived_params = params_derived_c + params_derived_d
 
+planet_params_latex = copy.deepcopy(planet_params)
+
 parameters = params_general + planet_params
+parameters_latex = params_general_latex + planet_params_latex
 
 Q = {parameters[i]: i for i in range(len(parameters))}
 
@@ -66,7 +75,6 @@ nDerived = len(derived_params)
 time_pre, time_post, time_harps = X_pre['Time'], X_post['Time'], X_harps['Time']
 obs_pre, obs_post, obs_harps = X_pre['RV'], X_post['RV'], X_harps['RV']
 err_pre, err_post, err_harps = X_pre['e_RV'], X_post['e_RV'], X_harps['e_RV']
-adjusted_time_pre, adjusted_time_post, adjusted_time_harps = time_pre - 2457000, time_post - 2457000, time_harps - 2457000
 
 # Combine all RV data
 time_RV = np.block([X_pre['Time'], X_post['Time'], X_harps['Time']])
@@ -199,15 +207,14 @@ def myprior(q):
     qq = np.copy(q)
 
     # priors 
-    qq[Q['A_RV']] = pt.uniform(q[Q['A_RV']], 0, 17)
-    qq[Q['P_rot']] = pt.jeffreys(q[Q['P_rot']], 5, 520)
-    qq[Q['t_decay']] = pt.jeffreys(q[Q['t_decay']], 2.5, 2600)
-    # T_decay > P_rot/2
-    qq[Q['gamma']] = pt.uniform(q[Q['gamma']], 0.05, 5)
-    qq[Q['sigma_RV_pre']] = pt.uniform(q[Q['sigma_RV_pre']], 0, max_jitter_pre)
-    qq[Q['sigma_RV_post']] = pt.uniform(q[Q['sigma_RV_post']], 0, max_jitter_post)
-    qq[Q['v0_pre']] = pt.gaussian(q[Q['v0_pre']], -5579.1, 0.0035)
-    qq[Q['off_post']] = pt.gaussian(q[Q['off_post']], 2.88, 4.8)
+    qq[Q['A_RV']] = pt.uniform(q[Q['A_RV']], 0, 17) # U(0, 17)
+    qq[Q['P_rot']] = pt.jeffreys(q[Q['P_rot']], 5, 520) # J(5, 520)
+    qq[Q['t_decay']] = pt.jeffreys(q[Q['t_decay']], qq[Q['P_rot']] / 2, 2600)     # T_decay > P_rot/2 + J(2.5, 2600)
+    qq[Q['gamma']] = pt.uniform(q[Q['gamma']], 0.05, 5) # U(0.05, 5)
+    qq[Q['sigma_RV_pre']] = pt.uniform(q[Q['sigma_RV_pre']], 0, max_jitter_pre) # U(0, max_jitter_pre)
+    qq[Q['sigma_RV_post']] = pt.uniform(q[Q['sigma_RV_post']], 0, max_jitter_post)  # U(0, max_jitter_post)
+    qq[Q['v0_pre']] = pt.gaussian(q[Q['v0_pre']], -5579.1, 0.0035)  # N(-5579.1, 0.0035)
+    qq[Q['off_post']] = pt.gaussian(q[Q['off_post']], 2.88, 4.8)    # N(2.88, 4.8)
 
     # planet priors
     qq = planet_prior(qq)
@@ -216,9 +223,16 @@ def myprior(q):
 
 def mean_fxn(T0, q):
     Y0 = np.zeros(T0.shape)
+    # ESPRESSO pre offset
     Y0[0:n_pre] += q[Q['v0_pre']]
+
+    # ESPRESSO post offset
     Y0[n_pre:n_pre + n_post] += q[Q['v0_pre']] + q[Q['off_post']]
+
+    # HARPS offset
     Y0[n_pre + n_post:] += q[Q['v0_pre']] + q[Q['off_post']]
+
+    # Compute the RV model with corrected offsets
     Y0 += compute_planets_RV(T0, q)
     return Y0
 
