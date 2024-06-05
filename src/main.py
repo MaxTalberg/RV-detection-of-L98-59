@@ -1,5 +1,5 @@
 from config_loader import load_config
-from data_pipeline import clean_and_pickle
+from pickle_data import clean_and_pickle
 
 
 def main():

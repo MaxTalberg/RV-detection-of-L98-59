@@ -68,3 +68,9 @@ def clean_and_pickle(espresso_path: str, harps_path: str, pickle_path: str):
     # Save to pickle
     with open(pickle_path, 'wb') as handle:
         pickle.dump(data_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+def load_data_from_pickle(filepath):
+    # Open the pickle file in binary read mode
+    with open(filepath, 'rb') as file:
+        data = pickle.load(file)
+    return data
