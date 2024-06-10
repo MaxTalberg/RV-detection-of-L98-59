@@ -8,7 +8,7 @@ def planet_prior(qq):
 
     if INCLUDE_PLANET_B:
         # planet b
-        qq[Q["P_b"]] = pt.jeffreys(qq[Q["P_b"]], 0.1, 520)
+        qq[Q["P_b"]] = pt.gaussian(qq[Q["P_b"]], 2.2531136, 1.5e-6)
         qq[Q["secosw_b"]] = pt.kipping_beta(qq[Q["secosw_b"]])
         qq[Q["sesinw_b"]] = pt.kipping_beta(qq[Q["sesinw_b"]])
         qq[Q["K_b"]] = pt.uniform(qq[Q["K_b"]], 0, 17)
@@ -16,7 +16,7 @@ def planet_prior(qq):
         qq[Q["phi_b"]] = pt.uniform(qq[Q["phi_b"]], 0, 1)
 
     # planet c
-    qq[Q["P_c"]] = pt.jeffreys(qq[Q["P_c"]], 0.1, 520)
+    qq[Q["P_c"]] = pt.gaussian(qq[Q["P_c"]], 3.6906777, 2.6e-6)
     qq[Q["secosw_c"]] = pt.kipping_beta(qq[Q["secosw_c"]])
     qq[Q["sesinw_c"]] = pt.kipping_beta(qq[Q["sesinw_c"]])
     qq[Q["K_c"]] = pt.uniform(qq[Q["K_c"]], 0, 17)
@@ -24,7 +24,7 @@ def planet_prior(qq):
     qq[Q["phi_c"]] = pt.uniform(qq[Q["phi_c"]], 0, 1)
 
     # planet d
-    qq[Q["P_d"]] = pt.jeffreys(qq[Q["P_d"]], 0.1, 520)
+    qq[Q["P_d"]] = pt.gaussian(qq[Q["P_d"]],  7.4507245, 8.1e-6)
     qq[Q["secosw_d"]] = pt.kipping_beta(qq[Q["secosw_d"]])
     qq[Q["sesinw_d"]] = pt.kipping_beta(qq[Q["sesinw_d"]])
     qq[Q["K_d"]] = pt.uniform(qq[Q["K_d"]], 0, 17)
