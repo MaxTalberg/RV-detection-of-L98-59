@@ -6,8 +6,6 @@ from config_data import adjusted_time_RV, n_pre, n_post
 
 
 def compute_derived_parameters(q):
-    print(q)
-
     # Time
     T_start = min(adjusted_time_RV)
     T_end = max(adjusted_time_RV)
@@ -97,7 +95,7 @@ def compute_planets_RV(T0, q):
     return RV_total
 
 
-def compute_offset(T0, q):
+def mean_fxn(T0, q):
 
     Y0 = np.zeros(T0.shape)
 

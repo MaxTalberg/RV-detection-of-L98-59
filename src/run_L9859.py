@@ -20,7 +20,7 @@ from config_data import (
 )
 
 from priors import planet_prior
-from computations import compute_derived_parameters, compute_offset
+from computations import compute_derived_parameters, mean_fxn
 
 
 # --- Output directory
@@ -87,7 +87,7 @@ def myloglike(theta):
     gp.compute(adjusted_time_RV, err_RV)
 
     # Compute the RV model and residuals
-    mu_RV = compute_offset(adjusted_time_RV, q)
+    mu_RV = mean_fxn(adjusted_time_RV, q)
     residuals = obs_RV - mu_RV
 
     # Compute the log likelihood
