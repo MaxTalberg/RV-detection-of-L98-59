@@ -24,7 +24,7 @@ def planet_prior(qq):
     qq[Q["phi_c"]] = pt.uniform(qq[Q["phi_c"]], 0, 1)
 
     # planet d
-    qq[Q["P_d"]] = pt.gaussian(qq[Q["P_d"]],  7.4507245, 8.1e-6)
+    qq[Q["P_d"]] = pt.gaussian(qq[Q["P_d"]], 7.4507245, 8.1e-6)
     qq[Q["secosw_d"]] = pt.kipping_beta(qq[Q["secosw_d"]])
     qq[Q["sesinw_d"]] = pt.kipping_beta(qq[Q["sesinw_d"]])
     qq[Q["K_d"]] = pt.uniform(qq[Q["K_d"]], 0, 17)
