@@ -12,6 +12,7 @@ PolyChordLite
 notebooks/chain/
 src/chain/
 chains/
+src/output_dir/
 
 # ignore output dir
 notebooks/L98_59_aldo/
