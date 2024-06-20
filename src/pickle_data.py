@@ -39,9 +39,9 @@ def clean_and_pickle(espresso_path: str, harps_path: str, pickle_path: str):
     cleaned_harps_df = harps_df[~harps_df["Time"].isin(excluded_bjds)].copy()
 
     # Missing vals to nan
-    cleaned_harps_df['FWHM'] = cleaned_harps_df['FWHM'].astype(str)
-    cleaned_harps_df['FWHM'].replace('---', np.nan, inplace=True)
-    cleaned_harps_df['FWHM'] = pd.to_numeric(cleaned_harps_df['FWHM'], errors='coerce')
+    cleaned_harps_df["FWHM"] = cleaned_harps_df["FWHM"].astype(str)
+    cleaned_harps_df["FWHM"].replace("---", np.nan, inplace=True)
+    cleaned_harps_df["FWHM"] = pd.to_numeric(cleaned_harps_df["FWHM"], errors="coerce")
 
     cleaned_harps_df["BIS"].replace("---", np.nan, inplace=True)
 
