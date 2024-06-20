@@ -1,4 +1,5 @@
 import pickle
+import numpy as np
 import pandas as pd
 
 
@@ -37,19 +38,12 @@ def clean_and_pickle(espresso_path: str, harps_path: str, pickle_path: str):
     excluded_bjds = [2458503.795048, 2458509.552019, 2458511.568314, 2458512.581045]
     cleaned_harps_df = harps_df[~harps_df["Time"].isin(excluded_bjds)].copy()
 
-    # Interpolate missing values
-    cleaned_harps_df["FWHM"] = (
-        cleaned_harps_df["FWHM"]
-        .replace("---", 0)
-        .astype(float)
-        .interpolate(method="linear")
-    )
-    cleaned_harps_df["BIS"] = (
-        cleaned_harps_df["BIS"]
-        .replace("---", 0)
-        .astype(float)
-        .interpolate(method="linear")
-    )
+    # Missing vals to nan
+    cleaned_harps_df['FWHM'] = cleaned_harps_df['FWHM'].astype(str)
+    cleaned_harps_df['FWHM'].replace('---', np.nan, inplace=True)
+    cleaned_harps_df['FWHM'] = pd.to_numeric(cleaned_harps_df['FWHM'], errors='coerce')
+
+    cleaned_harps_df["BIS"].replace("---", np.nan, inplace=True)
 
     # --- ESPRESSO
     # Column titles
