@@ -19,6 +19,7 @@ notebooks/L98_59_aldo/
 src/L98_59_aldo/
 src/__pycache__/
 L98_59_aldo/
+output_dir/
 
 # output.txt
 output.txt
