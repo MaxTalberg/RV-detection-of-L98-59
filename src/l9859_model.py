@@ -188,9 +188,9 @@ class L9859Analysis:
             "\\sigma_{Sindex, HARPS}",
         ]
 
-        params_planet_b = ["P_b", "Tc_b", "secosw_b", "sesinw_b", "K_b", "w_b", "phi_b"]
-        params_planet_c = ["P_c", "Tc_c", "secosw_c", "sesinw_c", "K_c", "w_c", "phi_c"]
-        params_planet_d = ["P_d", "Tc_d", "secosw_d", "sesinw_d", "K_d", "w_d", "phi_d"]
+        params_planet_b = ["P_b", "Tc_b", "secosw_b", "sesinw_b", "K_b", "w_b"]
+        params_planet_c = ["P_c", "Tc_c", "secosw_c", "sesinw_c", "K_c", "w_c"]
+        params_planet_d = ["P_d", "Tc_d", "secosw_d", "sesinw_d", "K_d", "w_d"]
 
         params_derived_b = ["e_b*"]
         params_derived_c = ["e_c*"]
@@ -333,7 +333,6 @@ class L9859Analysis:
             qq[self.Q["sesinw_b"]] = pt.kipping_beta(qq[self.Q["sesinw_b"]])
             qq[self.Q["K_b"]] = pt.uniform(qq[self.Q["K_b"]], 0, 17)
             qq[self.Q["w_b"]] = pt.uniform(qq[self.Q["w_b"]], -np.pi, np.pi)
-            qq[self.Q["phi_b"]] = pt.uniform(qq[self.Q["phi_b"]], 0, 1)
 
         # planet c
         qq[self.Q["P_c"]] = pt.gaussian(qq[self.Q["P_c"]], 3.6906777, 2.6e-6)
@@ -342,7 +341,6 @@ class L9859Analysis:
         qq[self.Q["sesinw_c"]] = pt.kipping_beta(qq[self.Q["sesinw_c"]])
         qq[self.Q["K_c"]] = pt.uniform(qq[self.Q["K_c"]], 0, 17)
         qq[self.Q["w_c"]] = pt.uniform(qq[self.Q["w_c"]], -np.pi, np.pi)
-        qq[self.Q["phi_c"]] = pt.uniform(qq[self.Q["phi_c"]], 0, 1)
 
         # planet d
         qq[self.Q["P_d"]] = pt.gaussian(qq[self.Q["P_d"]], 7.4507245, 8.1e-6)
@@ -351,7 +349,6 @@ class L9859Analysis:
         qq[self.Q["sesinw_d"]] = pt.kipping_beta(qq[self.Q["sesinw_d"]])
         qq[self.Q["K_d"]] = pt.uniform(qq[self.Q["K_d"]], 0, 17)
         qq[self.Q["w_d"]] = pt.uniform(qq[self.Q["w_d"]], -np.pi, np.pi)
-        qq[self.Q["phi_d"]] = pt.uniform(qq[self.Q["phi_d"]], 0, 1)
 
         return qq
 
