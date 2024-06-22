@@ -4,15 +4,15 @@ from l9859_model import L9859Analysis
 def main():
     filepath = "datasets/cleaned_data_20240531.pickle"
     include_planet_b = False
-    include_fwhm = True
+    include_fwhm = False
     include_sindex = False
     algorithm_params = {
         "do_clustering": True,
-        "precision_criterion": 1,
-        "num_repeats": 1,
+        "precision_criterion": 1e-9,
+        "num_repeats": 5,
         "read_resume": False,
-        "nprior": 500,
-        "nfail": 5000,
+        "nprior": 5000,
+        "nfail": 50000,
     }
 
     output_params = {

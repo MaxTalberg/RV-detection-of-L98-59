@@ -371,13 +371,13 @@ class L9859Analysis:
         )  # U(0, max_jitter_post)
         qq[self.Q["sigma_RV_harps"]] = pt.uniform(q[self.Q["sigma_RV_harps"]], 0, 10.5)
         qq[self.Q["v0_pre"]] = pt.gaussian(
-            q[self.Q["v0_pre"]], -5579.1, 0.0035
+            q[self.Q["v0_pre"]], -5579.2, 0.0035
         )  # N(-5579.1, 0.0035)
         qq[self.Q["off_post"]] = pt.gaussian(
-            q[self.Q["off_post"]], 2.88, 4.8
+            q[self.Q["off_post"]], 2.86, 4.65
         )  # N(2.88, 4.8)
         qq[self.Q["off_harps"]] = pt.gaussian(
-            q[self.Q["off_harps"]], -99.5, 5.0
+            q[self.Q["off_harps"]], -99.4, 4.9
         )  # N(-99.5, 5.0)
 
         if self.include_fwhm:
@@ -410,7 +410,11 @@ class L9859Analysis:
                 q[self.Q["sigma_Sindex_pre"]], 0, 0.0127
             )
             qq[self.Q["sigma_Sindex_post"]] = pt.uniform(
-                q[self.Q["sigma_Sindex_post"]], 0, 0.700
+                q[self.Q["sigma_Sindex_post"]], 0, 0.010445
+            )
+
+            qq[self.Q["sigma_Sindex_harps"]] = pt.uniform(
+                q[self.Q["sigma_Sindex_harps"]], 0, 0.700
             )
 
         # planet priors
