@@ -475,9 +475,10 @@ class L9859Analysis:
         )
 
         # Compute the GP covariance matrix
+
         A_RV = np.log(q[self.Q["A_RV"]] ** 2)
         gamma = q[self.Q["gamma"]]
-        log_period = np.log(1.0 / q[self.Q["P_rot"]])  # frequency = 1 / period
+        log_period = np.log(q[self.Q["P_rot"]])  # frequency = 1 / period
         t_decay = np.log(q[self.Q["t_decay"]] ** 2)
 
         p0 = np.array([A_RV, gamma, log_period, t_decay])

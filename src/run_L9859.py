@@ -16,7 +16,7 @@ def main():
     }
 
     output_params = {
-        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}/".format(
+        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}_test_LogP/".format(
             include_planet_b, include_fwhm, include_sindex
         ),
         "feedback": 1,
