@@ -152,17 +152,6 @@ def plot_periodogram(
     periodograms = {}
 
     try:
-        observation_indicator = np.ones_like(time)
-        window_frequency, window_power = LombScargle(
-            time, observation_indicator
-        ).autopower(
-            minimum_frequency=min_frequency,
-            maximum_frequency=max_frequency,
-            normalization="standard",
-            samples_per_peak=samples_per_peak,
-        )
-        periodograms["WF"] = (window_frequency, window_power)
-
         for index in activity_indices:
             mask = ~np.isnan(time) & ~np.isnan(data[index])
             cleaned_time = time[mask]
@@ -180,6 +169,17 @@ def plot_periodogram(
                 periodograms[index] = (frequency, power)
             else:
                 raise ValueError(f"Not enough valid data points for index {index}")
+
+        observation_indicator = np.ones_like(time)
+        window_frequency, window_power = LombScargle(
+            time, observation_indicator
+        ).autopower(
+            minimum_frequency=min_frequency,
+            maximum_frequency=max_frequency,
+            normalization="standard",
+            samples_per_peak=samples_per_peak,
+        )
+        periodograms["WF"] = (window_frequency, window_power)
 
     except Exception as e:
         raise RuntimeError(f"Error computing periodograms: {e}")
@@ -237,7 +237,7 @@ def plot_periodogram(
         if i == 0 and not ESPRESSO:
             ax.text(
                 -0.1,
-                0.285,
+                0.245,
                 r"$P_{rot}$",
                 color="black",
                 verticalalignment="top",
@@ -245,18 +245,18 @@ def plot_periodogram(
             )
             ax.text(
                 0.35,
-                0.285,
+                0.245,
                 r"$\frac{P_{rot}}{2}$",
                 color="black",
                 verticalalignment="top",
                 size=18,
             )
-            ax.text(1.45, 0.275, r"$P_d$", color="b", verticalalignment="top", size=20)
-            ax.text(3.05, 0.275, r"$P_c$", color="g", verticalalignment="top", size=20)
-            ax.text(5.04, 0.275, r"$P_b$", color="r", verticalalignment="top", size=20)
-            ax.text(6.35, 0.24, "0.1%", color="black", verticalalignment="top", size=20)
-            ax.text(6.35, 0.2, "1%", color="black", verticalalignment="top", size=20)
-            ax.text(6.35, 0.16, "10%", color="black", verticalalignment="top", size=20)
+            ax.text(1.45, 0.24, r"$P_d$", color="b", verticalalignment="top", size=20)
+            ax.text(3.05, 0.24, r"$P_c$", color="g", verticalalignment="top", size=20)
+            ax.text(5.04, 0.24, r"$P_b$", color="r", verticalalignment="top", size=20)
+            ax.text(6.35, 0.18, "0.1%", color="black", verticalalignment="top", size=20)
+            ax.text(6.35, 0.15, "1%", color="black", verticalalignment="top", size=20)
+            ax.text(6.35, 0.12, "10%", color="black", verticalalignment="top", size=20)
 
     fig.supxlabel("Frequency [µHz]", fontsize=20)
     fig.supylabel("Normalised Power", fontsize=20)

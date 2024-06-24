@@ -120,6 +120,7 @@ def clean_and_pickle(espresso_path: str, harps_path: str, pickle_path: str):
         # Save to pickle file
         with open(pickle_path, "wb") as handle:
             pickle.dump(data_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            print(f"Data cleand and pickled at {pickle_path}")
     except Exception as e:
         print(f"Error saving data to pickle: {e}")
 

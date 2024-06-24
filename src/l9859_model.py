@@ -142,12 +142,12 @@ class L9859Analysis:
         ]
 
         params_general_latex = [
-            r"A_{RV}",
-            r"P_{rot}",
-            r"\lambda_p",
-            r"\lambda_e",
-            r"\sigma_{RV, pre}",
-            r"\sigma_{RV, post}",
+            "A_{RV}",
+            "P_{rot}",
+            "\lambda_p",
+            "\lambda_e",
+            "\sigma_{RV, pre}",
+            "\\sigma_{RV, post}",
             r"\sigma_{RV, HARPS}",
             r"v_{0, pre}",
             r"off_{post}",
