@@ -142,16 +142,16 @@ class L9859Analysis:
         ]
 
         params_general_latex = [
-            "A_{RV}",
-            "P_{rot}",
-            "t_{decay}",
-            "\\gamma",
-            "\\sigma_{RV, pre}",
-            "\\sigma_{RV, post}",
-            "\\sigma_{RV, HARPS}",
-            "v_{0, pre}",
-            "off_{post}",
-            "off_{HARPS}",
+            r"A_{RV}",
+            r"P_{rot}",
+            r"\lambda_p",
+            r"\lambda_e",
+            r"\sigma_{RV, pre}",
+            r"\sigma_{RV, post}",
+            r"\sigma_{RV, HARPS}",
+            r"v_{0, pre}",
+            r"off_{post}",
+            r"off_{HARPS}",
         ]
 
         params_fwhm = [
@@ -162,11 +162,11 @@ class L9859Analysis:
             "sigma_FWHM_post",
         ]
         params_fwhm_latex = [
-            "A_{FWHM}",
-            "C_{FWHM, pre}",
-            "C_{FWHM, post}",
-            "\\sigma_{FWHM, pre}",
-            "\\sigma_{FWHM, post}",
+            r"A_{FWHM}",
+            r"C_{FWHM, pre}",
+            r"C_{FWHM, post}",
+            r"\sigma_{FWHM, pre}",
+            r"\sigma_{FWHM, post}",
         ]
 
         params_sindex = [
@@ -179,13 +179,13 @@ class L9859Analysis:
             "sigma_Sindex_harps",
         ]
         params_sindex_latex = [
-            "A_{Sindex}",
-            "C_{Sindex, pre}",
-            "C_{Sindex, post}",
-            "C_{Sindex, HARPS}",
-            "\\sigma_{Sindex, pre}",
-            "\\sigma_{Sindex, post}",
-            "\\sigma_{Sindex, HARPS}",
+            r"A_{Sindex}",
+            r"C_{Sindex, pre}",
+            r"C_{Sindex, post}",
+            r"C_{Sindex, HARPS}",
+            r"\sigma_{Sindex, pre}",
+            r"\sigma_{Sindex, post}",
+            r"\sigma_{Sindex, HARPS}",
         ]
 
         params_planet_b = ["P_b", "Tc_b", "secosw_b", "sesinw_b", "K_b", "w_b"]
@@ -207,7 +207,6 @@ class L9859Analysis:
         planet_params_latex = copy.deepcopy(planet_params)
         derived_params_latex = copy.deepcopy(self.derived_params)
 
-        # Integrate the planet parameters
         if self.include_fwhm:
             params_general += params_fwhm
             params_general_latex += params_fwhm_latex
@@ -227,10 +226,10 @@ class L9859Analysis:
 
     def create_qp_kernel(self):
 
-        amplitude = 1.0
-        gamma = 1.0
-        log_period = 0.0
-        length_scale = 1.0
+        amplitude = 2.44
+        gamma = 3.2
+        log_period = np.log(78)
+        length_scale = 49
 
         periodic_kernel = amplitude * kernels.ExpSine2Kernel(
             gamma=gamma, log_period=log_period
@@ -358,7 +357,7 @@ class L9859Analysis:
 
         # priors
         qq[self.Q["A_RV"]] = pt.uniform(q[self.Q["A_RV"]], 0, 16.8)  # U(0, 17)
-        qq[self.Q["P_rot"]] = pt.jeffreys(q[self.Q["P_rot"]], 5, 520)  # J(5, 520)
+        qq[self.Q["P_rot"]] = pt.uniform(q[self.Q["P_rot"]], 5, 520)  # J(5, 520)
         qq[self.Q["t_decay"]] = pt.jeffreys(
             q[self.Q["t_decay"]], qq[self.Q["P_rot"]] / 2, 2600
         )  # T_decay > P_rot/2 + J(2.5, 2600)
@@ -371,8 +370,8 @@ class L9859Analysis:
         )  # U(0, max_jitter_post)
         qq[self.Q["sigma_RV_harps"]] = pt.uniform(q[self.Q["sigma_RV_harps"]], 0, 10.5)
         qq[self.Q["v0_pre"]] = pt.gaussian(
-            q[self.Q["v0_pre"]], -5579.2, 0.0035
-        )  # N(-5579.1, 0.0035)
+            q[self.Q["v0_pre"]], -5579.2, 35
+        )  # N(-5579.1, 35)
         qq[self.Q["off_post"]] = pt.gaussian(
             q[self.Q["off_post"]], 2.86, 4.65
         )  # N(2.88, 4.8)
@@ -474,12 +473,10 @@ class L9859Analysis:
             else [self.e_c, self.e_d]
         )
 
-        # Compute the GP covariance matrix
-
-        A_RV = np.log(q[self.Q["A_RV"]] ** 2)
+        A_RV = q[self.Q["A_RV"]]
         gamma = q[self.Q["gamma"]]
-        log_period = np.log(q[self.Q["P_rot"]])  # frequency = 1 / period
-        t_decay = np.log(q[self.Q["t_decay"]] ** 2)
+        log_period = np.log(q[self.Q["P_rot"]])
+        t_decay = q[self.Q["t_decay"]]
 
         p0 = np.array([A_RV, gamma, log_period, t_decay])
         self.gp.set_parameter_vector(p0)
@@ -505,7 +502,7 @@ class L9859Analysis:
 
         if self.include_fwhm:
             # GP parameters for FWHM
-            A_FWHM = np.log(q[self.Q["A_FWHM"]] ** 2)
+            A_FWHM = q[self.Q["A_FWHM"]]
             p1 = np.array([A_FWHM, gamma, log_period, t_decay])
             self.gp_fwhm.set_parameter_vector(p1)
 
@@ -525,7 +522,7 @@ class L9859Analysis:
 
         if self.include_sindex:
             # GP parameters for S-index
-            A_Sindex = np.log(q[self.Q["A_Sindex"]] ** 2)
+            A_Sindex = q[self.Q["A_Sindex"]]
             p2 = np.array([A_Sindex, gamma, log_period, t_decay])
             self.gp_sindex.set_parameter_vector(p2)
 
@@ -594,7 +591,7 @@ class L9859Analysis:
 
         first_two_columns = ["log_likelihood", "derived_1"]
 
-        param_names = first_two_columns + self.parameters + self.derived_params
+        param_names = first_two_columns + self.parameters_latex
 
         posterior = MCSamples(samples=samples_data, names=param_names)
 

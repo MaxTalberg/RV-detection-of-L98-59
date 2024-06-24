@@ -4,11 +4,11 @@ from l9859_model import L9859Analysis
 def main():
     filepath = "datasets/cleaned_data_20240531.pickle"
     include_planet_b = False
-    include_fwhm = False
-    include_sindex = False
+    include_fwhm = True
+    include_sindex = True
     algorithm_params = {
         "do_clustering": True,
-        "precision_criterion": 1e-9,
+        "precision_criterion": 0.1,
         "num_repeats": 5,
         "read_resume": False,
         "nprior": 5000,
@@ -16,7 +16,7 @@ def main():
     }
 
     output_params = {
-        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}_test_LogP/".format(
+        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}_final_runs_normal/".format(
             include_planet_b, include_fwhm, include_sindex
         ),
         "feedback": 1,
