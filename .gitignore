@@ -1,9 +1,11 @@
 # ignore dataset
 datasets
 
-# ignore test and tesp
-tesp
-test
+# ignore test folders
+rvforwardmodelling
+rvgaussianprocess
+polychord
+radvel
 
 # ignore PolyChordLite
 PolyChordLite
