@@ -124,7 +124,7 @@ def clean_and_pickle(espresso_path: str, harps_path: str, pickle_path: str):
         print(f"Error saving data to pickle: {e}")
 
 
-def load_data_from_pickle(filepath):
+def unpickle_data(filepath):
     """
     Loads data from a pickle file.
 

@@ -17,7 +17,7 @@ from anesthetic import read_chains, make_1d_axes, make_2d_axes
 from pypolychord.settings import PolyChordSettings
 
 import prior_transforms as pt
-from pickle_data import load_data_from_pickle
+from pickle_data import unpickle_data
 
 
 class L9859Analysis:
@@ -66,7 +66,7 @@ class L9859Analysis:
         Processes the CSV file to extract time, radial velocity, FWHM, and BIS data along with their errors.
         Sets up derived parameters for the data such as maximum jitter and statistical measures (median, std, peak-to-peak).
         """
-        X = load_data_from_pickle(self.filepath)
+        X = unpickle_data(self.filepath)
         self.X_pre, self.X_post, self.X_harps = (
             X["ESPRESSO_pre"],
             X["ESPRESSO_post"],
@@ -357,7 +357,7 @@ class L9859Analysis:
 
         # priors
         qq[self.Q["A_RV"]] = pt.uniform(q[self.Q["A_RV"]], 0, 16.8)  # U(0, 17)
-        qq[self.Q["P_rot"]] = pt.uniform(q[self.Q["P_rot"]], 5, 520)  # J(5, 520)
+        qq[self.Q["P_rot"]] = pt.jeffreys(q[self.Q["P_rot"]], 5, 520)  # J(5, 520)
         qq[self.Q["t_decay"]] = pt.jeffreys(
             q[self.Q["t_decay"]], qq[self.Q["P_rot"]] / 2, 2600
         )  # T_decay > P_rot/2 + J(2.5, 2600)
@@ -591,7 +591,7 @@ class L9859Analysis:
 
         first_two_columns = ["log_likelihood", "derived_1"]
 
-        param_names = first_two_columns + self.parameters_latex
+        param_names = first_two_columns + self.parameters + self.derived_params
 
         posterior = MCSamples(samples=samples_data, names=param_names)
 
