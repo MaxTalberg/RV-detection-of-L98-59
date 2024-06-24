@@ -142,14 +142,14 @@ class L9859Analysis:
         ]
 
         params_general_latex = [
-            "A_{RV}",
-            "P_{rot}",
-            "\lambda_p",
-            "\lambda_e",
-            "\sigma_{RV, pre}",
-            "\\sigma_{RV, post}",
-            r"\sigma_{RV, HARPS}",
-            r"v_{0, pre}",
+            r"A_{RV}",
+            r"P_{rot}",
+            r"lambda_p",
+            r"lambda_e",
+            r"sigma_{RV,pre}",
+            r"sigma_{RV,post}",
+            r"sigma_{RV,HARPS}",
+            r"v_{0,pre}",
             r"off_{post}",
             r"off_{HARPS}",
         ]
@@ -163,10 +163,10 @@ class L9859Analysis:
         ]
         params_fwhm_latex = [
             r"A_{FWHM}",
-            r"C_{FWHM, pre}",
-            r"C_{FWHM, post}",
-            r"\sigma_{FWHM, pre}",
-            r"\sigma_{FWHM, post}",
+            r"C_{FWHM,pre}",
+            r"C_{FWHM,post}",
+            r"sigma_{FWHM,pre}",
+            r"sigma_{FWHM,post}",
         ]
 
         params_sindex = [
@@ -180,12 +180,12 @@ class L9859Analysis:
         ]
         params_sindex_latex = [
             r"A_{Sindex}",
-            r"C_{Sindex, pre}",
-            r"C_{Sindex, post}",
-            r"C_{Sindex, HARPS}",
-            r"\sigma_{Sindex, pre}",
-            r"\sigma_{Sindex, post}",
-            r"\sigma_{Sindex, HARPS}",
+            r"C_{Sindex,pre}",
+            r"C_{Sindex,post}",
+            r"C_{Sindex,HARPS}",
+            r"sigma_{Sindex,pre}",
+            r"sigma_{Sindex,post}",
+            r"sigma_{Sindex,HARPS}",
         ]
 
         params_planet_b = ["P_b", "Tc_b", "secosw_b", "sesinw_b", "K_b", "w_b"]
@@ -591,7 +591,7 @@ class L9859Analysis:
 
         first_two_columns = ["log_likelihood", "derived_1"]
 
-        param_names = first_two_columns + self.parameters + self.derived_params
+        param_names = first_two_columns + self.parameters_latex
 
         posterior = MCSamples(samples=samples_data, names=param_names)
 

@@ -16,8 +16,8 @@ def main():
     """
     filepath = "datasets/cleaned_data_20240531.pickle"
     include_planet_b = False
-    include_fwhm = True
-    include_sindex = True
+    include_fwhm = False
+    include_sindex = False
     algorithm_params = {
         "do_clustering": True,
         "precision_criterion": 0.1,
@@ -28,7 +28,7 @@ def main():
     }
 
     output_params = {
-        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}_final_runs_normal/".format(
+        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}_final/".format(
             include_planet_b, include_fwhm, include_sindex
         ),
         "feedback": 1,
@@ -43,7 +43,7 @@ def main():
             algorithm_params,
             output_params,
         )
-        analysis.run_analysis()
+        #analysis.run_analysis()
         analysis.handle_results()
     except Exception as e:
         print(f"An error occurred during the analysis: {e}")
