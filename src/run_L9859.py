@@ -2,6 +2,18 @@ from l9859_model import L9859Analysis
 
 
 def main():
+    """
+    Main function to run nested sampling Gaussian Process (GP) regression model
+    on the L98-59 system, using radial velocity (RV) data from HARPS and ESPRESSO.
+
+    It configures the analysis based on specified parameters, including the
+    inclusion of specific dataset features and algorithmic settings.
+
+    Raises
+    ------
+    Exception
+        General exception raised during execution of the analysis.
+    """
     filepath = "datasets/cleaned_data_20240531.pickle"
     include_planet_b = False
     include_fwhm = True
@@ -22,17 +34,20 @@ def main():
         "feedback": 1,
     }
 
-    analysis = L9859Analysis(
-        filepath,
-        include_planet_b,
-        include_fwhm,
-        include_sindex,
-        algorithm_params,
-        output_params,
-    )
+    try:
+        analysis = L9859Analysis(
+            filepath,
+            include_planet_b,
+            include_fwhm,
+            include_sindex,
+            algorithm_params,
+            output_params,
+        )
+        analysis.run_analysis()
+        analysis.handle_results()
+    except Exception as e:
+        print(f"An error occurred during the analysis: {e}")
 
-    analysis.run_analysis()
-    analysis.handle_results()
 
 
 if __name__ == "__main__":
