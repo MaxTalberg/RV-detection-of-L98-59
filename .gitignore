@@ -4,6 +4,7 @@ datasets
 # ignore test folders
 rvforwardmodelling
 rvgaussianprocess
+notebooks
 polychord
 radvel
 
