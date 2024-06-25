@@ -20,7 +20,7 @@ def main():
     include_sindex = False
     algorithm_params = {
         "do_clustering": True,
-        "precision_criterion": 0.1,
+        "precision_criterion": 1e-9,
         "num_repeats": 5,
         "read_resume": False,
         "nprior": 5000,
@@ -28,7 +28,7 @@ def main():
     }
 
     output_params = {
-        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}_final/".format(
+        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}_final_test_log_cond/".format(
             include_planet_b, include_fwhm, include_sindex
         ),
         "feedback": 1,
@@ -43,7 +43,7 @@ def main():
             algorithm_params,
             output_params,
         )
-        #analysis.run_analysis()
+        # analysis.run_analysis()
         analysis.handle_results()
     except Exception as e:
         print(f"An error occurred during the analysis: {e}")

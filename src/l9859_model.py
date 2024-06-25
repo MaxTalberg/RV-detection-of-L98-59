@@ -142,16 +142,16 @@ class L9859Analysis:
         ]
 
         params_general_latex = [
-            r"A_{RV}",
-            r"P_{rot}",
-            r"lambda_p",
-            r"lambda_e",
-            r"sigma_{RV,pre}",
-            r"sigma_{RV,post}",
-            r"sigma_{RV,HARPS}",
-            r"v_{0,pre}",
-            r"off_{post}",
-            r"off_{HARPS}",
+            r"$A_{RV}$",
+            r"$P_{rot}$",
+            r"$\lambda_e$",
+            r"$\lambda_p$",
+            r"$\sigma_{RV,pre}$",
+            r"$\sigma_{RV,post}$",
+            r"$\sigma_{RV,HARPS}$",
+            r"$v0_{pre}$",
+            r"$ΔRV_{post/pre}$",
+            r"$ΔRV_{HARPS/pre}$",
         ]
 
         params_fwhm = [
@@ -162,11 +162,11 @@ class L9859Analysis:
             "sigma_FWHM_post",
         ]
         params_fwhm_latex = [
-            r"A_{FWHM}",
-            r"C_{FWHM,pre}",
-            r"C_{FWHM,post}",
-            r"sigma_{FWHM,pre}",
-            r"sigma_{FWHM,post}",
+            r"$A_{FWHM}$",
+            r"$C_{FWHM,pre}$",
+            r"$C_{FWHM,post}$",
+            r"$sigma_{FWHM,pre}$",
+            r"$Sigma_{FWHM,post}$",
         ]
 
         params_sindex = [
@@ -179,33 +179,63 @@ class L9859Analysis:
             "sigma_Sindex_harps",
         ]
         params_sindex_latex = [
-            r"A_{Sindex}",
-            r"C_{Sindex,pre}",
-            r"C_{Sindex,post}",
-            r"C_{Sindex,HARPS}",
-            r"sigma_{Sindex,pre}",
-            r"sigma_{Sindex,post}",
-            r"sigma_{Sindex,HARPS}",
+            r"$A_{Sindex}$",
+            r"$C_{Sindex,pre}$",
+            r"$C_{Sindex,post}$",
+            r"$C_{Sindex,HARPS}$",
+            r"$\sigma_{Sindex,pre}$",
+            r"$\sigma_{Sindex,post}$",
+            r"$\sigma_{Sindex,HARPS}$",
         ]
 
         params_planet_b = ["P_b", "Tc_b", "secosw_b", "sesinw_b", "K_b", "w_b"]
+        params_planet_b_latex = [
+            r"$P_b$",
+            r"$Tc_b$",
+            r"$e\cos{\omega}_b$",
+            r"$e\sin{\omega}_b$",
+            r"$K_b$",
+            r"$w_b$",
+        ]
         params_planet_c = ["P_c", "Tc_c", "secosw_c", "sesinw_c", "K_c", "w_c"]
+        params_planet_c_latex = [
+            r"$P_c$",
+            r"$Tc_c$",
+            r"$e\cos{\omega}_c$",
+            r"$e\sin{\omega}_c$",
+            r"$K_c$",
+            r"$w_c$",
+        ]
         params_planet_d = ["P_d", "Tc_d", "secosw_d", "sesinw_d", "K_d", "w_d"]
-
+        params_planet_d_latex = [
+            r"$P_d$",
+            r"$Tc_d$",
+            r"$e\cos{\omega}_d$",
+            r"$e\sin{\omega}_d$",
+            r"$K_d$",
+            r"$w_d$",
+        ]
         params_derived_b = ["e_b*"]
+        params_derived_b_latex = [r"$e_b$"]
         params_derived_c = ["e_c*"]
+        params_derived_c_latex = [r"$e_c$"]
         params_derived_d = ["e_d*"]
+        params_derived_d_latex = [r"$e_d$"]
 
         if self.include_planet_b:
             planet_params = params_planet_b + params_planet_c + params_planet_d
             self.derived_params = params_derived_b + params_derived_c + params_derived_d
-
+            planet_params_latex = (
+                params_planet_b_latex + params_planet_c_latex + params_planet_d_latex
+            )
+            derived_params_latex = (
+                params_derived_b_latex + params_derived_c_latex + params_derived_d_latex
+            )
         else:
             planet_params = params_planet_c + params_planet_d
             self.derived_params = params_derived_c + params_derived_d
-
-        planet_params_latex = copy.deepcopy(planet_params)
-        derived_params_latex = copy.deepcopy(self.derived_params)
+            planet_params_latex = params_planet_c_latex + params_planet_d_latex
+            derived_params_latex = params_derived_c_latex + params_derived_d_latex
 
         if self.include_fwhm:
             params_general += params_fwhm
@@ -473,10 +503,10 @@ class L9859Analysis:
             else [self.e_c, self.e_d]
         )
 
-        A_RV = q[self.Q["A_RV"]]
+        A_RV = np.log(q[self.Q["A_RV"]])
         gamma = q[self.Q["gamma"]]
         log_period = np.log(q[self.Q["P_rot"]])
-        t_decay = q[self.Q["t_decay"]]
+        t_decay = np.log(q[self.Q["t_decay"]])
 
         p0 = np.array([A_RV, gamma, log_period, t_decay])
         self.gp.set_parameter_vector(p0)
@@ -502,7 +532,7 @@ class L9859Analysis:
 
         if self.include_fwhm:
             # GP parameters for FWHM
-            A_FWHM = q[self.Q["A_FWHM"]]
+            A_FWHM = np.log(q[self.Q["A_FWHM"]])
             p1 = np.array([A_FWHM, gamma, log_period, t_decay])
             self.gp_fwhm.set_parameter_vector(p1)
 
@@ -522,7 +552,7 @@ class L9859Analysis:
 
         if self.include_sindex:
             # GP parameters for S-index
-            A_Sindex = q[self.Q["A_Sindex"]]
+            A_Sindex = np.log(q[self.Q["A_Sindex"]])
             p2 = np.array([A_Sindex, gamma, log_period, t_decay])
             self.gp_sindex.set_parameter_vector(p2)
 
@@ -589,16 +619,29 @@ class L9859Analysis:
         samples_file = self.load_samples_from_file(file_name)
         samples_data = samples_file
 
-        first_two_columns = ["log_likelihood", "derived_1"]
+        first_two_columns = ["log_likelihood", "Prior Volume"]
 
         param_names = first_two_columns + self.parameters_latex
 
         posterior = MCSamples(samples=samples_data, names=param_names)
 
+        posterior.setParamNames(param_names[1:])
+
+        print(posterior.getMargeStats())
+
         means = posterior.getMeans()
 
         vars = posterior.getVars()
+
         sds = np.sqrt(vars)
+        len_time = len(self.adjusted_time_RV)
+        if self.include_fwhm:
+            len_time += len(self.adjusted_time_FWHM)
+        if self.include_sindex:
+            len_time += len(self.adjusted_time_RV)
+
+        print("Number of dimensions: ", self.nDims)
+        print("Number of data points:", len_time)
 
         for index, (name, mean, sd) in enumerate(zip(param_names[1:], means, sds)):
             print(rf"{index}. {name}: {mean} $\pm$ {sd}")

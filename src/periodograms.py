@@ -1,3 +1,5 @@
+import os
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -5,7 +7,8 @@ from astropy.timeseries import LombScargle
 from pickle_data import unpickle_data
 
 # --- Import relevant data
-pickle_file_path = "datasets/cleaned_data_20240531.pickle"
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+pickle_file_path = root_dir + "/datasets/cleaned_data_20240531.pickle"
 X = unpickle_data(pickle_file_path)
 X_pre, X_post, X_harps = X["ESPRESSO_pre"], X["ESPRESSO_post"], X["HARPS"]
 n_pre, n_post, n_harps = len(X_pre["RV"]), len(X_post["RV"]), len(X_harps["RV"])
@@ -41,11 +44,11 @@ def convert_to_microhertz(frequency_in_days):
     Convert frequency from days to microhertz.
 
     Parameters:
-    ----------
+    -----------
         frequency_in_days (float): Frequency in days.
 
     Returns:
-    -------
+    --------
         float: Frequency in microhertz.
     """
     return frequency_in_days * 1e6 / 86400
@@ -56,11 +59,11 @@ def convert_to_days(frequency_in_microhertz):
     Convert frequency from microhertz to days.
 
     Parameters:
-    ----------
+    -----------
         frequency_in_microhertz (float): Frequency in microhertz.
 
     Returns:
-    -------
+    --------
         float: Frequency in days.
     """
     return frequency_in_microhertz * 86400 / 1e6
@@ -71,11 +74,11 @@ def frequency_to_period(frequency):
     Convert frequency to period.
 
     Parameters:
-    ----------
+    -----------
         frequency (float): Frequency in microhertz.
 
     Returns:
-    -------
+    --------
         float: Period in days.
     """
     return 1 / (frequency * 86400 * 1e-6)
@@ -93,7 +96,7 @@ def compute_periodogram(
     Compute the Lomb-Scargle periodogram for given data and time arrays.
 
     Parameters:
-    ----------
+    -----------
         time (array): Time data points.
         data (array): Data points corresponding to time.
         min_frequency (float): Minimum frequency to analyze.
@@ -102,7 +105,7 @@ def compute_periodogram(
         ESPRESSO (bool): Flag to indicate whether data is from ESPRESSO or not (default False).
 
     Returns:
-    -------
+    --------
         tuple: Tuple containing frequency array, power array, and FAP thresholds.
     """
     frequency, power = LombScargle(time, data).autopower(
@@ -131,7 +134,7 @@ def plot_periodogram(
     Generate periodogram plots for the given data.
 
     Parameters:
-    ----------
+    -----------
         time (array): Time data points.
         data (DataFrame): Data containing the activity indices.
         activity_indices (list): List of indices to be plotted.
@@ -141,6 +144,7 @@ def plot_periodogram(
         max_frequency (float): Maximum frequency to analyze.
         samples_per_peak (int): Number of samples per peak for the analysis.
         ESPRESSO (bool): Flag to indicate whether data is from ESPRESSO or not (default False).
+
     Raises:
     -------
         ValueError: If time or data arrays are empty.
