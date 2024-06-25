@@ -26,3 +26,7 @@ output_dir/
 
 # output.txt
 output.txt
+
+# ignore docs
+docs/.DS_Store
+docs/_build/
