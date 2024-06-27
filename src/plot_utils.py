@@ -8,82 +8,6 @@ from pickle_data import unpickle_data
 from periodograms import convert_to_microhertz
 
 
-def derive_priors(pickle_file_path):
-
-    # Load data from pickle file
-    X = unpickle_data(pickle_file_path)
-    X_pre, X_post, X_harps = X["ESPRESSO_pre"], X["ESPRESSO_post"], X["HARPS"]
-
-    # Extract time, observations, and errors
-    time_pre, time_post, time_harps = X_pre["Time"], X_post["Time"], X_harps["Time"]
-    obs_pre, obs_post, obs_harps = X_pre["RV"], X_post["RV"], X_harps["RV"]
-    err_pre, err_post, err_harps = X_pre["e_RV"], X_post["e_RV"], X_harps["e_RV"]
-
-    # Combine all RV data
-    time_RV = np.block([time_pre, time_post, time_harps])
-    obs_RV = np.block([obs_pre, obs_post, obs_harps])
-    err_RV = np.block([err_pre, err_post, err_harps])
-    adjusted_time_RV = time_RV - 2457000
-
-    # Print RV related information
-    print("############## RV ##############")
-    print("vo offset:", np.median(obs_pre), "std", np.sum(err_pre))
-    print(
-        "pre,post offset:",
-        np.median(obs_post) - np.median(obs_pre),
-        "std",
-        np.sqrt(np.std(obs_post) ** 2 + np.std(obs_pre) ** 2),
-    )
-    print(
-        "pre,harps offset:",
-        np.median(obs_harps) - np.median(obs_pre),
-        "std",
-        np.sqrt(np.std(obs_harps) ** 2 + np.std(obs_pre) ** 2),
-    )
-
-    print("A_RV max:", np.max([np.ptp(obs_pre), np.ptp(obs_post), np.ptp(obs_harps)]))
-    print("A_RV all max:", np.max(np.ptp(obs_RV)))
-
-    # FWHM and S-index processing
-    fwhm_obs_pre, fwhm_obs_post = X_pre["FWHM"] / 1000, X_post["FWHM"] / 1000
-    fwhm_err_pre, fwhm_err_post = X_pre["e_FWHM"], X_post["e_FWHM"]
-
-    fwhm_obs = np.block([fwhm_obs_pre, fwhm_obs_post])
-    print("############## FWHM ##############")
-    print("C fwhm pre:", np.median(fwhm_obs_pre), "std", np.std(fwhm_obs_pre))
-    print("C fwhm post:", np.median(fwhm_obs_post), "std", np.std(fwhm_obs_post))
-    print("A fwhm max:", np.max([np.ptp(fwhm_obs_pre), np.ptp(fwhm_obs_post)]))
-
-    sindex_obs_pre, sindex_obs_post, sindex_obs_harps = (
-        X_pre["Sindex"],
-        X_post["Sindex"],
-        X_harps["Sindex"],
-    )
-    sindex_all = np.block([sindex_obs_pre, sindex_obs_post, sindex_obs_harps])
-    print("############## S-index ##############")
-    print("C sindex pre:", np.median(sindex_obs_pre), "std", np.std(sindex_obs_pre))
-    print("C sindex post:", np.median(sindex_obs_post), "std", np.std(sindex_obs_post))
-    print(
-        "C sindex harps:", np.median(sindex_obs_harps), "std", np.std(sindex_obs_harps)
-    )
-    print("A max Sindex:", np.max(np.ptp(sindex_all)))
-
-    # Return a dictionary of combined and processed data for further use
-    return {
-        "time_RV": time_RV,
-        "obs_RV": obs_RV,
-        "err_RV": err_RV,
-        "adjusted_time_RV": adjusted_time_RV,
-        "fwhm_obs": fwhm_obs,
-        "sindex_all": sindex_all,
-    }
-
-
-# Usage
-pickle_file_path = "datasets/cleaned_data_20240531.pickle"
-data = derive_priors(pickle_file_path)
-
-
 class PlotUtils:
     def __init__(self, pickle_file_path):
         self.pickle_file_path = pickle_file_path
@@ -129,13 +53,13 @@ class PlotUtils:
 
     def setup_gp(self):
         log_period = np.log(27.38068137156724)
-        A_RV = 7.711836893488454
-        gamma = 2.917125126168333
-        t_decay = 382.801299740658
+        self.A_RV = 7.711836893488454
+        self.gamma = 2.917125126168333
+        self.t_decay = 382.801299740658
         K_trial = (
-            A_RV
-            * kernels.ExpSine2Kernel(gamma=gamma, log_period=log_period)
-            * kernels.ExpSquaredKernel(metric=t_decay)
+            self.A_RV
+            * kernels.ExpSine2Kernel(gamma=self.gamma, log_period=log_period)
+            * kernels.ExpSquaredKernel(metric=self.t_decay)
         )
         self.gp = GP(K_trial)
         self.gp.compute(self.adjusted_time_RV, self.err_RV)
@@ -333,12 +257,104 @@ class PlotUtils:
         plt.tight_layout()
         plt.show()
 
-        # Example usage
-        data_analyzer = PlotUtils("datasets/cleaned_data_20240531.pickle")
-        data_analyzer.plot_gp()
-        data_analyzer.plot_periodograms()
+    def plot_phase_folded_rv(self, num_bins=20):
+        Pc = 3.690677757166691  # period
+        times = np.array(self.adjusted_time_RV)  # observational times
+        rv_data = np.array(self.residuals)  # radial velocity measurements
+        rv_errors = np.array(self.err_RV)  # errors in radial velocity measurements
+
+        log_period = np.log(Pc)
+        A_RV = 8.089612560529813
+        gamma = 0.4605994875623325
+        t_decay = 404.83874800695094
+
+        K_trial_c = (
+            A_RV
+            * kernels.ExpSine2Kernel(gamma=gamma, log_period=log_period)
+            * kernels.ExpSquaredKernel(metric=t_decay)
+        )
+
+        # Calculate the phases for each observation
+        phases_c = (times % Pc) / Pc
+        sorted_indices_c = np.argsort(phases_c)  # Sorting indices
+
+        # Sorting the times, RV data, and errors according to phase
+        phases_sorted_c = phases_c[sorted_indices_c]
+        rv_sorted_c = rv_data[sorted_indices_c]
+        errors_sorted_c = rv_errors[sorted_indices_c]
+
+        # Generate a fine grid of phases and corresponding times for one period for plotting
+        fine_phases_c = np.linspace(
+            0, 1, 500
+        )  # Increased number of points for smoothness
+        fine_times_c = times[0] + fine_phases_c * Pc
+
+        # Setup the Gaussian Process
+        gp_c = GP(K_trial_c)
+        gp_c.compute(times, rv_errors)  # Make sure to use observation errors
+
+        # Predict the GP model over the fine grid
+        mu_fit_c, var_fit_c = gp_c.predict(
+            rv_sorted_c, fine_times_c, return_var=True
+        )  # Use sorted RV data
+        std_fit_c = np.sqrt(var_fit_c)
+
+        num_bins = 20  # Adjust this to increase or decrease the number of bins
+
+        # Bin edges
+        bins_c = np.linspace(0, 1, num_bins + 1)
+
+        # Digitize the phases to find out which bin they belong to
+        bin_indices = np.digitize(phases_sorted_c, bins_c) - 1
+
+        # Preparing arrays to hold the binned data
+        binned_rv_c = np.zeros(num_bins)
+        binned_errors_c = np.zeros(num_bins)
+        binned_phases_c = np.zeros(num_bins)
+
+        # Calculate the mean RV and standard error in each bin
+        for i in range(num_bins):
+            in_bin = bin_indices == i
+            if np.any(in_bin):
+                binned_rv_c[i] = np.mean(rv_sorted_c[in_bin])
+                # Standard error of the mean as the error estimate
+                binned_errors_c[i] = np.std(rv_sorted_c[in_bin]) / np.sqrt(
+                    np.sum(in_bin)
+                )
+                binned_phases_c[i] = np.mean(phases_sorted_c[in_bin])
+
+        # Plotting
+        plt.figure(figsize=(10, 6))
+        plt.errorbar(
+            binned_phases_c,
+            binned_rv_c,
+            yerr=binned_errors_c,
+            fmt="o",
+            label="Binned Observed Data",
+            color="blue",
+            alpha=0.8,
+        )
+        plt.errorbar(
+            phases_sorted_c,
+            rv_sorted_c,
+            yerr=errors_sorted_c,
+            fmt=".",
+            label="Observed Data",
+            color="k",
+            alpha=0.6,
+        )
+        plt.plot(fine_phases_c, mu_fit_c, color="r", label="GP Model Fit", linewidth=2)
+        plt.xlabel("Phase")
+        plt.ylabel("Radial Velocity (m/s)")
+        plt.title("Phase-folded RV Data with GP Model Fit")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
 
 
-data_analyzer = PlotUtils("datasets/cleaned_data_20240531.pickle")
-data_analyzer.plot_gp()
-data_analyzer.plot_periodograms()
+if __name__ == "__main__":
+    plot_utils = PlotUtils("datasets/cleaned_data_20240531.pickle")
+    plot_utils.plot_gp()
+    plot_utils.plot_periodograms()
+    plot_utils.plot_phase_folded_rv()
+    # Hypothetical setup (replace with your actual data and GP kernel)
