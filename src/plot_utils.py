@@ -211,23 +211,47 @@ class PlotUtils:
         the behavior of residuals, which can indicate systematic errors or model misfits.
         """
         try:
-            fig, axs = plt.subplots(2, 2, figsize=(15, 10), sharey='row',
-                                    gridspec_kw={'height_ratios': [7, 3], 'width_ratios': [8, 2]})
+            fig, axs = plt.subplots(
+                2,
+                2,
+                figsize=(15, 10),
+                sharey="row",
+                gridspec_kw={"height_ratios": [7, 3], "width_ratios": [8, 2]},
+            )
             # Observational data with GP fit
-            axs[0, 0].errorbar(self.adjusted_time_RV, self.obs_RV_adjusted, yerr=self.err_RV,
-                               fmt='o', label='Observations', color='blue', alpha=0.8)
-            axs[0, 0].plot(self.time_dense, self.mu, label='GP Model', color='red')
-            axs[0, 0].fill_between(self.time_dense, self.mu - self.std, self.mu + self.std,
-                                    color='red', alpha=0.3, label='Confidence Interval')
-            axs[0, 0].set_ylabel('RV [m/s]', fontsize=14)
+            axs[0, 0].errorbar(
+                self.adjusted_time_RV,
+                self.obs_RV_adjusted,
+                yerr=self.err_RV,
+                fmt="o",
+                label="Observations",
+                color="blue",
+                alpha=0.8,
+            )
+            axs[0, 0].plot(self.time_dense, self.mu, label="GP Model", color="red")
+            axs[0, 0].fill_between(
+                self.time_dense,
+                self.mu - self.std,
+                self.mu + self.std,
+                color="red",
+                alpha=0.3,
+                label="Confidence Interval",
+            )
+            axs[0, 0].set_ylabel("RV [m/s]", fontsize=14)
 
             # Calculating residuals for the second subplot
             self.residuals = self.obs_RV_adjusted - self.mu_t
-            axs[1, 0].errorbar(self.adjusted_time_RV, self.residuals, yerr=self.err_RV,
-                               fmt='o', color='red', label='Residuals')
-            axs[1, 0].axhline(0, linestyle='--', color='black')
-            axs[1, 0].set_xlabel('Time [BJD - 2457000]', fontsize=14)
-            axs[1, 0].set_ylabel('Residuals [m/s]', fontsize=14)
+            axs[1, 0].errorbar(
+                self.adjusted_time_RV,
+                self.residuals,
+                yerr=self.err_RV,
+                fmt="o",
+                color="red",
+                label="Residuals",
+            )
+            axs[1, 0].axhline(0, linestyle="--", color="black")
+            axs[1, 0].set_xlabel("Time [BJD - 2457000]", fontsize=14)
+            axs[1, 0].set_ylabel("Residuals [m/s]", fontsize=14)
 
             plt.tight_layout()
             plt.legend()
