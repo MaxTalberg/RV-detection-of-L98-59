@@ -43,7 +43,7 @@ def main():
             algorithm_params,
             output_params,
         )
-        #analysis.run_analysis()
+        analysis.run_analysis()
         analysis.handle_results()
     except Exception as e:
         print(f"An error occurred during the analysis: {e}")
