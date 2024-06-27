@@ -30,3 +30,6 @@ output.txt
 # ignore docs
 docs/.DS_Store
 docs/_build/
+
+# ignore notebook
+src/run_l9859.ipynb

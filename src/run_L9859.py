@@ -28,7 +28,7 @@ def main():
     }
 
     output_params = {
-        "base_dir": "output_dir/specific_run_b_{}_fwhm_{}_sindex_{}_final_test_log_cond/".format(
+        "base_dir": "output_dir/final/specific_run_b_{}_fwhm_{}_sindex_{}".format(
             include_planet_b, include_fwhm, include_sindex
         ),
         "feedback": 1,
@@ -43,7 +43,7 @@ def main():
             algorithm_params,
             output_params,
         )
-        # analysis.run_analysis()
+        #analysis.run_analysis()
         analysis.handle_results()
     except Exception as e:
         print(f"An error occurred during the analysis: {e}")

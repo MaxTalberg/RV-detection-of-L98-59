@@ -1,11 +1,10 @@
 # --- Imports
 import os
 import time
-import copy
 import pickle
 import radvel
 import george
-import anesthetic
+
 import pypolychord
 
 import numpy as np
