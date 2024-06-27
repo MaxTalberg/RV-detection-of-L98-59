@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 from george import kernels, GP
 from astropy.stats import LombScargle
@@ -26,7 +25,7 @@ class PlotUtils:
     **Methods**
 
     __init__(self, pickle_file_path)
-        Initializes the object, loads data, and sets up Gaussian Processes.
+        Initialises the object, loads data, and sets up Gaussian Processes.
     load_data(self)
         Loads and processes observational data from a pickle file.
     setup_gp(self)
@@ -35,7 +34,7 @@ class PlotUtils:
 
     def __init__(self, pickle_file_path):
         """
-        Initializes the PlotUtils object.
+        Initialises the PlotUtils object.
 
         Parameters
         ----------
@@ -50,7 +49,7 @@ class PlotUtils:
         """
         Load and process data from a pickle file for astronomical observations.
 
-        This method initializes attributes for observational times, radial velocities (RV),
+        This method initialises attributes for observational times, radial velocities (RV),
         and associated errors, adjusting for specific instrument offsets and baseline times.
 
         The adjustments are made to:
@@ -164,7 +163,7 @@ class PlotUtils:
                 * kernels.ExpSquaredKernel(metric=t_decay)
             )
 
-            # Initialize the Gaussian Process
+            # Initialise the Gaussian Process
             self.gp = GP(kernel)
             self.gp.compute(
                 self.adjusted_time_RV, self.err_RV
@@ -191,55 +190,50 @@ class PlotUtils:
 
     def plot_gp(self):
         """
-        Plots the Gaussian Process model results and the residuals.
+        Plots the Gaussian Process (GP) model results along with observational data and residuals.
 
-        The first subplot displays the Gaussian Process model fit along with the observational data.
-        The second subplot shows the residuals from the GP fit.
-        This method visualizes the GP fitting and the discrepancies between the model and observed data.
+        This visualization includes two subplots:
+        1. The top subplot shows the GP model fit to the observational data with a confidence interval.
+        2. The bottom subplot displays the residuals, indicating discrepancies between the model and observed data.
+
+        Parameters
+        ----------
+        None
+
+        Raises
+        ------
+        RuntimeError
+            If an error occurs during plotting due to data or configuration issues.
+
+        Notes
+        -----
+        This method is useful for assessing the quality of the GP fit and understanding
+        the behavior of residuals, which can indicate systematic errors or model misfits.
         """
-        fig, axs = plt.subplots(
-            2,
-            2,
-            figsize=(15, 10),
-            sharey="row",
-            gridspec_kw={"height_ratios": [7, 3], "width_ratios": [8, 2]},
-        )
-        axs[0, 0].errorbar(
-            self.adjusted_time_RV,
-            self.obs_RV_adjusted,
-            yerr=self.err_RV,
-            fmt="o",
-            label="Observations",
-            color="blue",
-            alpha=0.8,
-        )
-        axs[0, 0].plot(self.time_dense, self.mu, label="GP Model", color="red")
-        axs[0, 0].fill_between(
-            self.time_dense,
-            self.mu - self.std,
-            self.mu + self.std,
-            color="red",
-            alpha=0.3,
-            label="Confidence Interval",
-        )
-        axs[0, 0].set_ylabel("RV [m/s]", fontsize=14)
+        try:
+            fig, axs = plt.subplots(2, 2, figsize=(15, 10), sharey='row',
+                                    gridspec_kw={'height_ratios': [7, 3], 'width_ratios': [8, 2]})
+            # Observational data with GP fit
+            axs[0, 0].errorbar(self.adjusted_time_RV, self.obs_RV_adjusted, yerr=self.err_RV,
+                               fmt='o', label='Observations', color='blue', alpha=0.8)
+            axs[0, 0].plot(self.time_dense, self.mu, label='GP Model', color='red')
+            axs[0, 0].fill_between(self.time_dense, self.mu - self.std, self.mu + self.std,
+                                    color='red', alpha=0.3, label='Confidence Interval')
+            axs[0, 0].set_ylabel('RV [m/s]', fontsize=14)
 
-        self.residuals = self.obs_RV_adjusted - self.mu_t
-        axs[1, 0].errorbar(
-            self.adjusted_time_RV,
-            self.residuals,
-            yerr=self.err_RV,
-            fmt="o",
-            color="red",
-            label="Residuals",
-        )
-        axs[1, 0].axhline(0, linestyle="--", color="black")
-        axs[1, 0].set_xlabel("Time [BJD - 2457000]", fontsize=14)
-        axs[1, 0].set_ylabel("Residuals [m/s]", fontsize=14)
+            # Calculating residuals for the second subplot
+            self.residuals = self.obs_RV_adjusted - self.mu_t
+            axs[1, 0].errorbar(self.adjusted_time_RV, self.residuals, yerr=self.err_RV,
+                               fmt='o', color='red', label='Residuals')
+            axs[1, 0].axhline(0, linestyle='--', color='black')
+            axs[1, 0].set_xlabel('Time [BJD - 2457000]', fontsize=14)
+            axs[1, 0].set_ylabel('Residuals [m/s]', fontsize=14)
 
-        plt.tight_layout()
-        plt.legend()
-        plt.show()
+            plt.tight_layout()
+            plt.legend()
+            plt.show()
+        except Exception as e:
+            raise RuntimeError(f"Failed to plot Gaussian Process results: {str(e)}")
 
     def plot_periodograms(self):
         """
@@ -260,7 +254,7 @@ class PlotUtils:
 
         Notes
         -----
-        The method utilizes false alarm probabilities to indicate the significance of detected frequencies in the periodograms.
+        The method utilises false alarm probabilities to indicate the significance of detected frequencies in the periodograms.
         """
         min_frequency = 0.002025227467386652
         max_frequency = 0.5177264355163222
