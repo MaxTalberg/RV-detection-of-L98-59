@@ -14,7 +14,7 @@ class TestL9859Analysis(unittest.TestCase):
 
     @patch("l9859_model.L9859Analysis.load_data")
     def setUp(self, mock_load_data):
-        # Mock the load_data, initialise_parameters, and create_qp_kernel to not perform any action during instantiation
+
         self.analysis = L9859Analysis(
             filepath="datasets/cleaned_data_20240531.pickle",
             include_planet_b=True,
