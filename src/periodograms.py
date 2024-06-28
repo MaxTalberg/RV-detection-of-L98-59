@@ -266,9 +266,7 @@ def plot_periodogram(
     fig.supylabel("Normalised Power", fontsize=20)
 
     plt.tight_layout()
-    plt.savefig(
-        "plots/{}_periodogram.png".format("ESPRESSO" if ESPRESSO else "HARPS")
-    )
+    plt.savefig("plots/{}_periodogram.png".format("ESPRESSO" if ESPRESSO else "HARPS"))
     print(
         f"Plot saved successfully to output_dir/{'ESPRESSO' if ESPRESSO else 'HARPS'}_periodogram.png"
     )
