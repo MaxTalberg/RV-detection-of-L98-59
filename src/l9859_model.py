@@ -8,11 +8,9 @@ import george
 import pypolychord
 
 import numpy as np
-import pandas as pd
 import getdist.plots as gdplots
 from getdist import MCSamples
 from george import kernels
-from anesthetic import read_chains, make_1d_axes, make_2d_axes
 from pypolychord.settings import PolyChordSettings
 
 import prior_transforms as pt
