@@ -63,12 +63,20 @@ class L9859Analysis:
         Processes the CSV file to extract time, radial velocity, FWHM, and BIS data along with their errors.
         Sets up derived parameters for the data such as maximum jitter and statistical measures (median, std, peak-to-peak).
         """
-        X = unpickle_data(self.filepath)
-        self.X_pre, self.X_post, self.X_harps = (
-            X["ESPRESSO_pre"],
-            X["ESPRESSO_post"],
-            X["HARPS"],
-        )
+        try:
+            X = unpickle_data(self.filepath)
+            self.X_pre, self.X_post, self.X_harps = (
+                X["ESPRESSO_pre"],
+                X["ESPRESSO_post"],
+                X["HARPS"],
+            )
+            self.setup_data()
+
+        except OSError as e:
+            print(f"Failed to load data: {e}")
+            raise
+
+    def setup_data(self):
         self.n_pre, self.n_post, self.n_harps = (
             len(self.X_pre["RV"]),
             len(self.X_post["RV"]),
