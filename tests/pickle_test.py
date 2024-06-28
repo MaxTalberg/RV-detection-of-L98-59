@@ -28,8 +28,12 @@ class TestPickles(unittest.TestCase):
             self.assertIn("ESPRESSO_pre", X, "Dataset keys missing")
             self.assertIn("ESPRESSO_post", X, "Dataset keys missing")
             self.assertIn("HARPS", X, "Dataset keys missing")
-            self.assertGreater(len(X["ESPRESSO_pre"]["RV"]), 0, "Data loading issue for ESPRESSO_pre")
-            self.assertGreater(len(X["ESPRESSO_post"]["RV"]), 0, "Data loading issue for ESPRESSO_post")
+            self.assertGreater(
+                len(X["ESPRESSO_pre"]["RV"]), 0, "Data loading issue for ESPRESSO_pre"
+            )
+            self.assertGreater(
+                len(X["ESPRESSO_post"]["RV"]), 0, "Data loading issue for ESPRESSO_post"
+            )
             self.assertGreater(len(X["HARPS"]["RV"]), 0, "Data loading issue for HARPS")
 
     @patch("builtins.open", side_effect=FileNotFoundError)
