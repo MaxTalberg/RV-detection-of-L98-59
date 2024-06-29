@@ -93,11 +93,24 @@
 <span class="kn">from</span> <span class="nn">pickle_data</span> <span class="kn">import</span> <span class="n">unpickle_data</span>
 
 
-<div class="viewcode-block" id="TestL9859Analysis"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis">[docs]</a><span class="k">class</span> <span class="nc">TestL9859Analysis</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestL9859"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859">[docs]</a><span class="k">class</span> <span class="nc">TestL9859</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unit tests for the L98-59 model class, ensuring that initialization and settings</span>
+<span class="sd">    are correctly applied and verifying the behavior of its setup.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TestL9859Analysis.setUp"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.setUp">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;l9859_model.L9859Analysis.load_data&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestL9859.setUp"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.setUp">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;l9859_model.L9859Analysis.load_data&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_load_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set up method for test cases. Initialises the L9859Analysis with specific</span>
+<span class="sd">        parameters before each test.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mock_load_data : unittest.mock.patch</span>
+<span class="sd">            Patch for the `load_data` method to prevent actual data loading during initialization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialise the L9859Analysis object with predefined parameters and mocks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="n">L9859Analysis</span><span class="p">(</span>
             <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;datasets/cleaned_data_20240531.pickle&quot;</span><span class="p">,</span>
             <span class="n">include_planet_b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -105,53 +118,83 @@
             <span class="n">include_sindex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_init"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;datasets/cleaned_data_20240531.pickle&quot;</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_planet_b</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_fwhm</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_sindex</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">polychord_settings</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;do_clustering&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">polychord_settings</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">output_params</span><span class="p">[</span><span class="s2">&quot;base_dir&quot;</span><span class="p">],</span> <span class="s2">&quot;output_dir/specific_run&quot;</span>
-        <span class="p">)</span></div>
+<div class="viewcode-block" id="TestL9859.test_init"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the initialization of the L9859Analysis class to ensure all properties</span>
+<span class="sd">        are set as expected.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check the filepath is stored correctly</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;datasets/cleaned_data_20240531.pickle&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Check feature inclusion flags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_planet_b</span><span class="p">,</span> <span class="s2">&quot;Planet B should be included.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_fwhm</span><span class="p">,</span> <span class="s2">&quot;FWHM should be included.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_sindex</span><span class="p">,</span> <span class="s2">&quot;S-index should be included.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Check types and values of other properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">polychord_settings</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">&quot;Polychord settings should be a dictionary.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;do_clustering&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">polychord_settings</span><span class="p">,</span> <span class="s2">&quot;Clustering setting should be in polychord settings.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Verify output directory parameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">output_params</span><span class="p">[</span><span class="s2">&quot;base_dir&quot;</span><span class="p">],</span> <span class="s2">&quot;output_dir/specific_run&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;Output base directory should match specified configuration.&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_load_data"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_load_data">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;pickle_data.unpickle_data&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestL9859.test_load_data"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_load_data">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;pickle_data.unpickle_data&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_unpickle_data</span><span class="p">):</span>
-        <span class="c1"># Set up mock return values for unpickle_data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test successful data loading to ensure data structures are correctly initialised</span>
+<span class="sd">        and populated with data from the unpickle process.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mock_unpickle_data : unittest.mock.patch</span>
+<span class="sd">            Mock of the unpickle_data function, set to return a predefined dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Set up mock return values for unpickle_data to simulate loaded data</span>
         <span class="n">mock_unpickle_data</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;ESPRESSO_pre&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;RV&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;Time&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;FWHM&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;e_FWHM&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;Sindex&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;e_Sindex&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s2">&quot;RV&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Time&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;FWHM&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;e_FWHM&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Sindex&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;e_Sindex&quot;</span><span class="p">:</span> <span class="p">[]</span>
             <span class="p">},</span>
             <span class="s2">&quot;ESPRESSO_post&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;RV&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;Time&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;FWHM&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;e_FWHM&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;Sindex&quot;</span><span class="p">:</span> <span class="p">[],</span>
-                <span class="s2">&quot;e_Sindex&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s2">&quot;RV&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Time&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;FWHM&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;e_FWHM&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Sindex&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;e_Sindex&quot;</span><span class="p">:</span> <span class="p">[]</span>
             <span class="p">},</span>
-            <span class="s2">&quot;HARPS&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;RV&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Time&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+            <span class="s2">&quot;HARPS&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;RV&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Time&quot;</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">}</span>
         <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>  <span class="c1"># Call the method</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">X_pre</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">X_post</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">X_harps</span><span class="p">)</span>
+
+        <span class="c1"># Invoke the method to load data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+        
+        <span class="c1"># Assertions to ensure that data containers are not None after loading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">X_pre</span><span class="p">,</span> <span class="s2">&quot;X_pre should not be None after loading data.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">X_post</span><span class="p">,</span> <span class="s2">&quot;X_post should not be None after loading data.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">X_harps</span><span class="p">,</span> <span class="s2">&quot;X_harps should not be None after loading data.&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Ensure data setup is called correctly</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">setup_data</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_load_data_failure"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_load_data_failure">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;pickle_data.unpickle_data&quot;</span><span class="p">,</span> <span class="n">side_effect</span><span class="o">=</span><span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;File not found&quot;</span><span class="p">))</span>
+<div class="viewcode-block" id="TestL9859.test_load_data_failure"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_load_data_failure">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;pickle_data.unpickle_data&quot;</span><span class="p">,</span> <span class="n">side_effect</span><span class="o">=</span><span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;File not found&quot;</span><span class="p">))</span>
     <span class="k">def</span> <span class="nf">test_load_data_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_unpickle_data</span><span class="p">):</span>
-        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">IOError</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the error handling of the data loading process when the data file is missing,</span>
+<span class="sd">        expecting an IOError.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mock_unpickle_data : unittest.mock.patch</span>
+<span class="sd">            Mock of the unpickle_data function, set to raise an IOError.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Expect an IOError when attempting to load a non-existent file</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Should raise IOError if the data file is missing&quot;</span><span class="p">):</span>
             <span class="n">unpickle_data</span><span class="p">(</span><span class="s2">&quot;non_existent_file.pickle&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_initialise_parameters_default"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_initialise_parameters_default">[docs]</a>    <span class="k">def</span> <span class="nf">test_initialise_parameters_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestL9859.test_initialise_parameters_default"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_initialise_parameters_default">[docs]</a>    <span class="k">def</span> <span class="nf">test_initialise_parameters_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the initialization of parameters with all additional features (planet B, FWHM, S-index) turned off.</span>
+<span class="sd">        This test verifies the base parameter setup without extensions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Reinitialise analysis with no additional features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="n">L9859Analysis</span><span class="p">(</span>
             <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;datasets/cleaned_data_20240531.pickle&quot;</span><span class="p">,</span>
             <span class="n">include_planet_b</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -159,159 +202,137 @@
             <span class="n">include_sindex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">initialise_parameters</span><span class="p">()</span>
-        <span class="c1"># Test the default setup without additional flags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;A_RV&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;A_FWHM&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;A_Sindex&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="mi">22</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">nDims</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">nDerived</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+        
+        <span class="c1"># Verify only base parameters are included</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;A_RV&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;A_RV should be in parameters&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;A_FWHM&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;A_FWHM should not be in parameters&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s2">&quot;A_Sindex&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;A_Sindex should not be in parameters&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Check the total number of parameters and derived parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">&quot;Total parameters should match the expected count without features&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">nDims</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="s2">&quot;nDims should match the number of parameters&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">nDerived</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;nDerived should match expected count for base features only&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_initialise_parameters_full"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_initialise_parameters_full">[docs]</a>    <span class="k">def</span> <span class="nf">test_initialise_parameters_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestL9859.test_initialise_parameters_full"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_initialise_parameters_full">[docs]</a>    <span class="k">def</span> <span class="nf">test_initialise_parameters_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the initialization of parameters with all additional features (planet B, FWHM, S-index) turned on.</span>
+<span class="sd">        This test verifies the complete parameter setup including extensions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Assume analysis is initialised in the setUp with all features enabled</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">initialise_parameters</span><span class="p">()</span>
-        <span class="c1"># Test the default setup without additional flags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;A_RV&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;A_FWHM&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;A_Sindex&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="mi">40</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">nDims</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">nDerived</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span></div>
+        
+        <span class="c1"># Verify all parameters, including those for additional features, are included</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;A_RV&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;A_RV should be in parameters&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;A_FWHM&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;A_FWHM should be in parameters&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;A_Sindex&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;A_Sindex should be in parameters&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Check the total number of parameters and derived parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">&quot;Total parameters should match the expected count with all features&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">nDims</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="s2">&quot;nDims should match the number of parameters&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">nDerived</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;nDerived should match expected count with all features enabled&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_derive_params"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_derive_params">[docs]</a>    <span class="k">def</span> <span class="nf">test_derive_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Set up initial values for Q and q for testing</span>
+<div class="viewcode-block" id="TestL9859.test_derive_params"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_derive_params">[docs]</a>    <span class="k">def</span> <span class="nf">test_derive_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the derivation of eccentricity parameters based on the given values of secosw and sesinw for planets b, c, and d.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Set up mock values for Q and q to test derivation logic</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;secosw_b&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;sesinw_b&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;secosw_c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s2">&quot;sesinw_c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-            <span class="s2">&quot;secosw_d&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-            <span class="s2">&quot;sesinw_d&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s2">&quot;secosw_b&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;sesinw_b&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;secosw_c&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;sesinw_c&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">&quot;secosw_d&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;sesinw_d&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="n">q_values</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="mf">0.6</span><span class="p">,</span>
-            <span class="mf">0.8</span><span class="p">,</span>
-            <span class="mf">0.3</span><span class="p">,</span>
-            <span class="mf">0.4</span><span class="p">,</span>
-            <span class="mf">0.5</span><span class="p">,</span>
-            <span class="mf">0.5</span><span class="p">,</span>
-        <span class="p">]</span>  <span class="c1"># Mock values for secosw, sesinw for b, c, d</span>
+        <span class="n">q_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>  <span class="c1"># Mock values for secosw, sesinw for planets b, c, d</span>
 
-        <span class="c1"># Invoke derive_params with the test values</span>
+        <span class="c1"># Invoke derive_params to calculate eccentricities based on q_values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">derive_params</span><span class="p">(</span><span class="n">q_values</span><span class="p">)</span>
 
-        <span class="c1"># Expected values calculated manually for confirmation</span>
-        <span class="n">expected_e_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-            <span class="n">q_values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;secosw_b&quot;</span><span class="p">]]</span> <span class="o">**</span> <span class="mi">2</span>
-            <span class="o">+</span> <span class="n">q_values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;sesinw_b&quot;</span><span class="p">]]</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="p">)</span>
-        <span class="n">expected_e_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-            <span class="n">q_values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;secosw_c&quot;</span><span class="p">]]</span> <span class="o">**</span> <span class="mi">2</span>
-            <span class="o">+</span> <span class="n">q_values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;sesinw_c&quot;</span><span class="p">]]</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="p">)</span>
-        <span class="n">expected_e_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-            <span class="n">q_values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;secosw_d&quot;</span><span class="p">]]</span> <span class="o">**</span> <span class="mi">2</span>
-            <span class="o">+</span> <span class="n">q_values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;sesinw_d&quot;</span><span class="p">]]</span> <span class="o">**</span> <span class="mi">2</span>
-        <span class="p">)</span>
+        <span class="c1"># Calculate expected eccentricities manually for verification</span>
+        <span class="n">expected_e_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">q_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">q_values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">expected_e_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">q_values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">q_values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">expected_e_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">q_values</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">q_values</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-        <span class="c1"># Assert the correct calculations of derived parameters</span>
+        <span class="c1"># Verify the derived parameters match expected values</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_planet_b</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">e_b</span><span class="p">,</span> <span class="n">expected_e_b</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">e_c</span><span class="p">,</span> <span class="n">expected_e_c</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">e_d</span><span class="p">,</span> <span class="n">expected_e_d</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">e_b</span><span class="p">,</span> <span class="n">expected_e_b</span><span class="p">,</span> <span class="s2">&quot;Eccentricity of planet b does not match expected value&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">e_c</span><span class="p">,</span> <span class="n">expected_e_c</span><span class="p">,</span> <span class="s2">&quot;Eccentricity of planet c does not match expected value&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">e_d</span><span class="p">,</span> <span class="n">expected_e_d</span><span class="p">,</span> <span class="s2">&quot;Eccentricity of planet d does not match expected value&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_compute_planets_RV"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_compute_planets_RV">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;radvel.RVModel&quot;</span><span class="p">,</span> <span class="n">autospec</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="TestL9859.test_compute_planets_RV"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_compute_planets_RV">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;radvel.RVModel&quot;</span><span class="p">,</span> <span class="n">autospec</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;radvel.Parameters&quot;</span><span class="p">,</span> <span class="n">autospec</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">test_compute_planets_RV</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_params</span><span class="p">,</span> <span class="n">mock_rv_model</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>  <span class="c1"># Load the mocked data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">setup_data</span><span class="p">()</span>  <span class="c1"># Set up the data based on loaded data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">initialise_parameters</span><span class="p">()</span>  <span class="c1"># Set up the parameters</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the computation of radial velocities (RV) using the radvel model with mocked parameters and RV model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Setup necessary data and parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>  <span class="c1"># Assume load_data populates X_pre, X_post, and X_harps appropriately</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">setup_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">initialise_parameters</span><span class="p">()</span>
 
+        <span class="c1"># Set a time array for RV computations</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">T0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">time_RV</span>
-        <span class="c1"># Setup mock return behavior</span>
-        <span class="n">mock_params</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">()</span>
-        <span class="n">mock_model_instance</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">()</span>
-        <span class="n">mock_rv_model</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_model_instance</span>
-        <span class="n">mock_model_instance</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
-            <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">)</span>
-        <span class="p">)</span>  <span class="c1"># Mock RV data</span>
 
-        <span class="c1"># Compute RV</span>
+        <span class="c1"># Setup mock objects to simulate radvel behavior</span>
+        <span class="n">mock_params</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">()</span>
+        <span class="n">mock_rv_model_instance</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">()</span>
+        <span class="n">mock_rv_model</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_rv_model_instance</span>
+        <span class="n">mock_rv_model_instance</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">))</span>  <span class="c1"># Mock radial velocity data</span>
+
+        <span class="c1"># Run RV computation with random parameter values</span>
         <span class="n">q_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
         <span class="n">rv_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">compute_planets_RV</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">,</span> <span class="n">q_vals</span><span class="p">)</span>
 
-        <span class="c1"># Assertions to verify behavior</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">rv_total</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rv_total</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">))</span>
-        <span class="n">mock_params</span><span class="o">.</span><span class="n">assert_called</span><span class="p">()</span>
-        <span class="n">mock_rv_model</span><span class="o">.</span><span class="n">assert_called_with</span><span class="p">(</span><span class="n">mock_params</span><span class="o">.</span><span class="n">return_value</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="TestL9859Analysis.test_planet_prior"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_planet_prior">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;prior_transforms.gaussian&quot;</span><span class="p">)</span>
+        <span class="c1"># Assert RV data is as expected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">rv_total</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="s2">&quot;Returned RV data should be a numpy array&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rv_total</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">),</span> <span class="s2">&quot;Length of RV data should match length of input times&quot;</span><span class="p">)</span>
+        <span class="n">mock_params</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+        <span class="n">mock_rv_model</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">mock_params</span><span class="o">.</span><span class="n">return_value</span><span class="p">)</span></div>
+<div class="viewcode-block" id="TestL9859.test_planet_prior"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_planet_prior">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;prior_transforms.gaussian&quot;</span><span class="p">)</span>
     <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;prior_transforms.kipping_beta&quot;</span><span class="p">)</span>
     <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;prior_transforms.uniform&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">test_planet_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_uniform</span><span class="p">,</span> <span class="n">mock_kipping_beta</span><span class="p">,</span> <span class="n">mock_gaussian</span><span class="p">):</span>
-        <span class="c1"># Set the mock functions to return specific, controlled values directly</span>
-        <span class="n">mock_gaussian</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="n">mu</span>
-        <span class="p">)</span>  <span class="c1"># Ignore x and sigma, just return mu</span>
-        <span class="n">mock_kipping_beta</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">0.2</span>
-        <span class="p">)</span>  <span class="c1"># Constant value, simplifying the test</span>
-        <span class="n">mock_uniform</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="p">(</span><span class="n">low</span> <span class="o">+</span> <span class="n">high</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="p">)</span>  <span class="c1"># Midpoint of low and high</span>
 
-        <span class="c1"># Set an initial value where the expected outcome is known</span>
-        <span class="n">q_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="mf">0.5</span>
-        <span class="p">)</span>  <span class="c1"># Using 0.5 as a simple base for calculation</span>
+    <span class="k">def</span> <span class="nf">test_planet_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_uniform</span><span class="p">,</span> <span class="n">mock_kipping_beta</span><span class="p">,</span> <span class="n">mock_gaussian</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the planet_prior function to ensure it correctly transforms parameters using the specified prior distributions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Configure mock behavior for each prior function to return predictable outputs</span>
+        <span class="n">mock_gaussian</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="n">mu</span>  <span class="c1"># Returns mean</span>
+        <span class="n">mock_kipping_beta</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">0.2</span>  <span class="c1"># Returns a fixed value</span>
+        <span class="n">mock_uniform</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="p">(</span><span class="n">low</span> <span class="o">+</span> <span class="n">high</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># Returns midpoint</span>
+
+        <span class="c1"># Initialise parameter values for testing</span>
+        <span class="n">q_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Base value for simplicity</span>
         <span class="n">transformed_qq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">planet_prior</span><span class="p">(</span><span class="n">q_vals</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
 
-        <span class="c1"># Using assertAlmostEqual for floating-point comparison with a tolerance</span>
+        <span class="c1"># Check that the transformed values are as expected</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_planet_b</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span>
-                <span class="n">transformed_qq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;P_b&quot;</span><span class="p">]],</span> <span class="mf">2.2531136</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span>
-            <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span>
-            <span class="n">transformed_qq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;P_c&quot;</span><span class="p">]],</span> <span class="mf">3.6906777</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span>
-            <span class="n">transformed_qq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;secosw_c&quot;</span><span class="p">]],</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span>
-            <span class="n">transformed_qq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;w_c&quot;</span><span class="p">]],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span>
-        <span class="p">)</span>  <span class="c1"># As uniform from -π to π centers at 0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">transformed_qq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;P_b&quot;</span><span class="p">]],</span> <span class="mf">2.2531136</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">transformed_qq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;P_c&quot;</span><span class="p">]],</span> <span class="mf">3.6906777</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">transformed_qq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;secosw_c&quot;</span><span class="p">]],</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">transformed_qq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;w_c&quot;</span><span class="p">]],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># Uniform distribution centered at 0</span>
 
-        <span class="c1"># Verify calls to the mocked functions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mock_gaussian</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c1"># 3 planets * (P and Tc)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
-            <span class="n">mock_kipping_beta</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="mi">6</span>
-        <span class="p">)</span>  <span class="c1"># 3 planets * (secosw and sesinw)</span>
+        <span class="c1"># Confirm the correct number of calls to each mocked prior function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mock_gaussian</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mock_kipping_beta</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">mock_uniform</span><span class="o">.</span><span class="n">call_count</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_myprior"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_myprior">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;prior_transforms.uniform&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="TestL9859.test_myprior"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_myprior">[docs]</a>    <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;prior_transforms.uniform&quot;</span><span class="p">)</span>
     <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;prior_transforms.jeffreys&quot;</span><span class="p">)</span>
     <span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;prior_transforms.gaussian&quot;</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">test_myprior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_gaussian</span><span class="p">,</span> <span class="n">mock_jeffreys</span><span class="p">,</span> <span class="n">mock_uniform</span><span class="p">):</span>
-        <span class="c1"># Set the mock functions to return specific, controlled values directly</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the myprior function to ensure proper application of parameter priors across different parameter types.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Setup mock returns that mimic the midpoint or mean behavior of the priors</span>
         <span class="n">mock_uniform</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="p">(</span><span class="n">low</span> <span class="o">+</span> <span class="n">high</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">mock_jeffreys</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">mock_gaussian</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">:</span> <span class="n">mu</span>
 
-        <span class="c1"># Initialize the analysis instance</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span> <span class="o">=</span> <span class="n">L9859Analysis</span><span class="p">(</span>
-            <span class="n">filepath</span><span class="o">=</span><span class="s2">&quot;datasets/cleaned_data_20240531.pickle&quot;</span><span class="p">,</span>
-            <span class="n">include_planet_b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Adjust as needed</span>
-            <span class="n">include_fwhm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Adjust as needed</span>
-            <span class="n">include_sindex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Adjust as needed</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Create an array of test input values</span>
-        <span class="n">q_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">),</span> <span class="mf">0.5</span>
-        <span class="p">)</span>  <span class="c1"># Using 0.5 as a simple base for calculation</span>
+        <span class="c1"># Create a parameter array to test</span>
+        <span class="n">q_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">),</span> <span class="mf">0.5</span><span class="p">)</span>
         <span class="n">transformed_qq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">myprior</span><span class="p">(</span><span class="n">q_vals</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
 
-        <span class="c1"># Define expected values based on mock behavior</span>
+        <span class="c1"># Expected values are determined by the midpoint or mean of the prior distributions</span>
         <span class="n">expected_values</span> <span class="o">=</span> <span class="p">{</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;A_RV&quot;</span><span class="p">]:</span> <span class="mf">8.4</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;P_rot&quot;</span><span class="p">]:</span> <span class="mf">262.5</span><span class="p">,</span>
@@ -325,71 +346,65 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="s2">&quot;off_harps&quot;</span><span class="p">]:</span> <span class="o">-</span><span class="mf">99.4</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="c1"># Assert transformed values</span>
+        <span class="c1"># Assert the expected values match the transformed values</span>
         <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">expected_values</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span>
-                    <span class="n">transformed_qq</span><span class="p">[</span><span class="n">index</span><span class="p">],</span>
-                    <span class="n">expected_values</span><span class="p">[</span><span class="n">index</span><span class="p">],</span>
-                    <span class="n">places</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                    <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed at parameter </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2"> (index </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
-                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">transformed_qq</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">expected_values</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">places</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                       <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Parameter </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2"> at index </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> did not match expected.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Verify that each mock was called correctly</span>
+        <span class="c1"># Check the called status of mocks to ensure they were used as expected</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">mock_uniform</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">mock_jeffreys</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">mock_gaussian</span><span class="o">.</span><span class="n">called</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_mean_fxn"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_mean_fxn">[docs]</a>    <span class="k">def</span> <span class="nf">test_mean_fxn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Create mock values for T0 and q</span>
+
+<div class="viewcode-block" id="TestL9859.test_mean_fxn"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_mean_fxn">[docs]</a>    <span class="k">def</span> <span class="nf">test_mean_fxn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the mean_fxn method to ensure it correctly computes mean functions for RV, FWHM, and Sindex based on the provided time and parameter vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Prepare necessary data and parameter setup</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>  <span class="c1"># Load the mocked data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">setup_data</span><span class="p">()</span>  <span class="c1"># Set up the data based on loaded data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">initialise_parameters</span><span class="p">()</span>  <span class="c1"># Set up the parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">setup_data</span><span class="p">()</span>  <span class="c1"># Set up data structures</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">initialise_parameters</span><span class="p">()</span>  <span class="c1"># Initialise parameters for the model</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">T0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">time_RV</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># Placeholder values for parameters</span>
 
-        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
-            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">Q</span><span class="p">),</span> <span class="mf">1.0</span>
-        <span class="p">)</span>  <span class="c1"># Example q array with placeholder values</span>
-
-        <span class="c1"># Call the mean_fxn method</span>
+        <span class="c1"># Execute the mean function computation</span>
         <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">mean_fxn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
 
-        <span class="c1"># Assert that results contain expected shapes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
-            <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="o">.</span><span class="n">shape</span>
-        <span class="p">)</span>  <span class="c1"># Y0 should have the same shape as T0</span>
+        <span class="c1"># Verify the output shapes and null conditions based on configuration flags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s2">&quot;Y0 results shape mismatch.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_fwhm</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">adjusted_time_FWHM</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">adjusted_time_FWHM</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s2">&quot;Y1 results shape mismatch.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNone</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># Y1 should be None if include_fwhm is False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNone</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;Y1 should be None when FWHM is not included.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">include_sindex</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
-                <span class="n">results</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="o">.</span><span class="n">shape</span>
-            <span class="p">)</span>  <span class="c1"># Y2 should have the same shape as T0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s2">&quot;Y2 results shape mismatch.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNone</span><span class="p">(</span>
-                <span class="n">results</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-            <span class="p">)</span>  <span class="c1"># Y2 should be None if include_sindex is False</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNone</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;Y2 should be None when Sindex is not included.&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestL9859Analysis.test_myloglike"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859Analysis.test_myloglike">[docs]</a>    <span class="k">def</span> <span class="nf">test_myloglike</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Create mock values for theta (parameter vector)</span>
+<div class="viewcode-block" id="TestL9859.test_myloglike"><a class="viewcode-back" href="../tests.html#l9859_tests.TestL9859.test_myloglike">[docs]</a>    <span class="k">def</span> <span class="nf">test_myloglike</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the myloglike method to evaluate the log likelihood calculation for the given parameter vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialise parameter vector for the test</span>
         <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">parameters</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>  <span class="c1"># Load the mocked data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">setup_data</span><span class="p">()</span>  <span class="c1"># Set up the data based on loaded data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">initialise_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>  <span class="c1"># Load mocked data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">setup_data</span><span class="p">()</span>  <span class="c1"># Configure data structures</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">initialise_parameters</span><span class="p">()</span>  <span class="c1"># Set up model parameters</span>
 
-        <span class="c1"># Call the myloglike method</span>
+        <span class="c1"># Compute log likelihood and derived parameters</span>
         <span class="n">loglike</span><span class="p">,</span> <span class="n">dps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">myloglike</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
 
-        <span class="c1"># Assert that the results are as expected</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dps</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">loglike</span><span class="p">)</span></div></div>
-
+        <span class="c1"># Assess the output, checking the number of derived parameters and the log likelihood value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dps</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Derived parameters count mismatch.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">loglike</span><span class="p">,</span> <span class="s2">&quot;Log likelihood should be a non-None value.&quot;</span><span class="p">)</span></div></div>
 
 <span class="c1"># Run the tests</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+    
 </pre></div>
 
            </div>
