@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "s
 
 import unittest
 from pickle_data import unpickle_data
-from l9859_model import L9859Analysis
+from src.l9859_model import L9859Analysis
 
 class TestPickles(unittest.TestCase):
     """
