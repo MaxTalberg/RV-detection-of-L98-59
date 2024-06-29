@@ -1,5 +1,6 @@
 import os
 import sys
+import numpy as np
 from unittest.mock import mock_open, patch
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
