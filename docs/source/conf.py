@@ -8,6 +8,12 @@
 import os
 import sys
 
+autodoc_mock_imports = [
+    "george",
+    "getdist",
+    "pypolychord",
+    "radvel"
+]
 sys.path.insert(0, os.path.abspath('../../src'))
 sys.path.insert(0, os.path.abspath('../../tests'))
 
