@@ -6,11 +6,29 @@
 Welcome to L98-59's documentation!
 ==================================
 
+Source Code Documentation
+=========================
+
+This document provides details on the modules within the `src` directory, detailing functionality, classes, methods, and attributes provided by each module.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Source Code Documentation:
+   :name: sourcecode
 
    src
+
+Unit Test Documentation
+=======================
+
+This document provides deatails on the unit tests for the project within the
+`tests` directory.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Unit Test Documentation:
+   :name: tests
+
    tests
 
 Indices and tables

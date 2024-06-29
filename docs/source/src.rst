@@ -1,10 +1,5 @@
 .. _src-documentation:
 
-Source Code Documentation
-=========================
-
-This document provides details on the modules within the `src` directory, detailing functionality, classes, methods, and attributes provided by each module.
-
 Config Loader
 =============
 
@@ -18,7 +13,7 @@ The module :mod:`config_loader` is responsible for loading configuration files, 
 Pickle Data
 ===========
 
-The module :mod:`pickle_data` provides utilities for serializing and deserializing Python objects using pickle, facilitating the storage and retrieval of complex data with ease.
+The module :mod:`pickle_data` serialises and deserialises the preprocessed HARPS and ESPRESSO dataset using pickle.
 
 .. automodule:: pickle_data
     :members:
@@ -27,7 +22,7 @@ The module :mod:`pickle_data` provides utilities for serializing and deserializi
 
 Periodogram
 ===========
-The module :mod:`periodogram` includes functions that calculate and plot the periodogram of the data.
+The module :mod:`periodogram` includes functions that calculate and plot the periodograms of the data.
 
 .. automodule:: periodograms
     :members:
@@ -48,7 +43,7 @@ in accordance with format required by PyMultiNest.
 L98-59 Model
 ============
 
-The module :mod:`l9859_model` includes a class modelling the L98-59 system.
+The module :mod:`l9859_model` is a class responsible modelling the L98-59 system.
 
 .. automodule:: l9859_model
     :members:
@@ -58,7 +53,7 @@ The module :mod:`l9859_model` includes a class modelling the L98-59 system.
 Run L98-59
 ==========
 
-The module :mod:`run_l9859` includes a function to run the L98-59 model.
+The module :mod:`run_l9859` is the function used to run the L98-59 model.
 
 .. automodule:: run_L9859
     :members:

@@ -1,6 +1,7 @@
 # Re-examining the radial velocity detection of L 98-59 b
+[![Documentation Status](https://readthedocs.org/projects/rv-detection-of-l98-59/badge/?version=latest)](https://rv-detection-of-l98-59.readthedocs.io/en/latest/?badge=latest)[![PyPI version](https://badge.fury.io/py/your-package-name.svg)](https://badge.fury.io/py/your-package-name)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![Documentation Status](https://readthedocs.org/projects/yourprojectname/badge/?version=latest)](https://yourprojectname.readthedocs.io/en/latest/?badge=latest) [![PyPI version](https://badge.fury.io/py/your-package-name.svg)](https://badge.fury.io/py/your-package-name)
 
 The radial velocity (RV) technique is responsible for the first convincing exoplanet discovered
 around a Sun-like star (Mayor & Queloz 1995) with a mass similar to Jupiter. Since this

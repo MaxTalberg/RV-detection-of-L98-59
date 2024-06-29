@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from astropy.timeseries import LombScargle
 from pickle_data import unpickle_data
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+
 # --- Import relevant data
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 pickle_file_path = root_dir + "/datasets/cleaned_data_20240531.pickle"
