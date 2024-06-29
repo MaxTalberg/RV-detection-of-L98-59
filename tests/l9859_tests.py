@@ -11,7 +11,9 @@ from pickle_data import unpickle_data
 
 
 class TestL9859Analysis(unittest.TestCase):
-
+    """
+    Unit tests for the L98-59 model class.
+    """
     @patch("l9859_model.L9859Analysis.load_data")
     def setUp(self, mock_load_data):
 
