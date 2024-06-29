@@ -13,6 +13,23 @@ class TestPickles(unittest.TestCase):
     """
     Unit tests for the unpickle_data function.
     """
+    def setUp(self, mock_load_data):
+        """
+        Set up method for test cases. Initialises the L9859Analysis with specific
+        parameters before each test.
+
+        Parameters
+        ----------
+        mock_load_data : unittest.mock.patch
+            Patch for the `load_data` method to prevent actual data loading during initialization.
+        """
+        # Initialise the L9859Analysis object with predefined parameters and mocks
+        self.analysis = L9859Analysis(
+            filepath="datasets/cleaned_data_20240531.pickle",
+            include_planet_b=True,
+            include_fwhm=True,
+            include_sindex=True,
+        )
 
     @patch("builtins.open", new_callable=mock_open, read_data=b"")
     def test_data_loading(self, mock_file):

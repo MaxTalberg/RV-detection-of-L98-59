@@ -6,8 +6,8 @@ from unittest.mock import patch, MagicMock
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
-from l9859_model import L9859Analysis
 from pickle_data import unpickle_data
+from l9859_model import L9859Analysis
 
 
 class TestL9859(unittest.TestCase):
@@ -321,4 +321,3 @@ class TestL9859(unittest.TestCase):
 # Run the tests
 if __name__ == "__main__":
     unittest.main()
-    
