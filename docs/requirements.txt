@@ -1,5 +1,5 @@
 nbsphinx==0.9.3
-numpy @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_f9f5xs2fx0/croot/numpy_and_numpy_base_1682520577456/work
+numpy==1.24.3
 radvel==1.4.11
 Sphinx==7.1.2
 sphinx-rtd-theme==2.0.0
