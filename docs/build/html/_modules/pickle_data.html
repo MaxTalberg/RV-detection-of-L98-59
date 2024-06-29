@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pickle_data &mdash; L98-59 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            L98-59
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Source Code Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../src.html">Config Loader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#pickle-data">Pickle Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#periodogram">Periodogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#prior-transforms">Prior Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#l98-59-model">L98-59 Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#run-l98-59">Run L98-59</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Unit Test Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html">Pickle Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html#l98-59-tests">L98-59 Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">L98-59</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pickle_data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pickle_data</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="clean_and_pickle"><a class="viewcode-back" href="../src.html#pickle_data.clean_and_pickle">[docs]</a><span class="k">def</span> <span class="nf">clean_and_pickle</span><span class="p">(</span><span class="n">espresso_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">harps_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pickle_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cleans the data from the ESPRESSO and HARPS instruments and pickles the results.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    espresso_path : str</span>
+<span class="sd">        File path for the ESPRESSO data file.</span>
+<span class="sd">    harps_path : str</span>
+<span class="sd">        File path for the HARPS data file.</span>
+<span class="sd">    pickle_path : str</span>
+<span class="sd">        Destination path to save the pickled data.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The function adjusts time values, filters out specific time points and handles</span>
+<span class="sd">    missing values according to those specifified in D. S. Demangeon et al. (2021).</span>
+<span class="sd">    The cleaned data is then saved into a pickle file format for persistence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># --- HARPS</span>
+    <span class="c1"># Define column titles</span>
+    <span class="n">column_titles</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;Time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RV&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_RV&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Halpha&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_Halpha&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Hbeta&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_Hbeta&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Hgamma&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_Hgamma&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;NaD&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_NaD&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Sindex&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_Sindex&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FWHM&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;BIS&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Load HARPS data</span>
+        <span class="n">harps_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">harps_path</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">column_titles</span><span class="p">)</span>
+        <span class="n">harps_df</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2457000</span>  <span class="c1"># Adjust the time column to BJD</span>
+
+        <span class="c1"># Filter out specific BJDs from HARPS data</span>
+        <span class="n">excluded_bjds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2458503.795048</span><span class="p">,</span> <span class="mf">2458509.552019</span><span class="p">,</span> <span class="mf">2458511.568314</span><span class="p">,</span> <span class="mf">2458512.581045</span><span class="p">]</span>
+        <span class="n">cleaned_harps_df</span> <span class="o">=</span> <span class="n">harps_df</span><span class="p">[</span><span class="o">~</span><span class="n">harps_df</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">excluded_bjds</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Replace invalid FWHM and BIS values with NaN</span>
+        <span class="n">cleaned_harps_df</span><span class="p">[</span><span class="s2">&quot;FWHM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned_harps_df</span><span class="p">[</span><span class="s2">&quot;FWHM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="n">cleaned_harps_df</span><span class="p">[</span><span class="s2">&quot;FWHM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cleaned_harps_df</span><span class="p">[</span><span class="s2">&quot;FWHM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span>
+            <span class="n">cleaned_harps_df</span><span class="p">[</span><span class="s2">&quot;FWHM&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span>
+        <span class="p">)</span>
+        <span class="n">cleaned_harps_df</span><span class="p">[</span><span class="s2">&quot;BIS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing HARPS data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># --- ESPRESSO</span>
+    <span class="c1"># Define column titles</span>
+    <span class="n">espresso_column_titles</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;Time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RV&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_RV&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FWHM&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_FWHM&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;BIS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_BIS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Contrast&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_Contrast&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Sindex&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_Sindex&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Halpha&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_Halpha&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;NaD&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;e_NaD&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;BERV&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Inst&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Load ESPRESSO data</span>
+        <span class="n">espresso_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+            <span class="n">espresso_path</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">espresso_column_titles</span>
+        <span class="p">)</span>
+        <span class="n">espresso_df</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2400000</span>  <span class="c1"># Adjust the time column to BJD</span>
+
+        <span class="c1"># Filter out specific BJDs from ESPRESSO data with a tolerance</span>
+        <span class="n">excluded_bjds</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2458645.496</span><span class="p">,</span> <span class="mf">2458924.639</span><span class="p">,</span> <span class="mf">2458924.645</span><span class="p">]</span>
+        <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1e-3</span>
+        <span class="n">cleaned_espresso_df</span> <span class="o">=</span> <span class="n">espresso_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">cleaned_espresso_df</span> <span class="o">=</span> <span class="n">cleaned_espresso_df</span><span class="p">[</span>
+            <span class="o">~</span><span class="n">cleaned_espresso_df</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">any</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">bjd</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tolerance</span> <span class="k">for</span> <span class="n">bjd</span> <span class="ow">in</span> <span class="n">excluded_bjds</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Split the data into pre and post fiber change</span>
+        <span class="n">cleaned_pre_df</span> <span class="o">=</span> <span class="n">cleaned_espresso_df</span><span class="p">[</span><span class="n">cleaned_espresso_df</span><span class="p">[</span><span class="s2">&quot;Inst&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pre&quot;</span><span class="p">]</span>
+        <span class="n">cleaned_post_df</span> <span class="o">=</span> <span class="n">cleaned_espresso_df</span><span class="p">[</span><span class="n">cleaned_espresso_df</span><span class="p">[</span><span class="s2">&quot;Inst&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Post&quot;</span><span class="p">]</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing ESPRESSO data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># --- Organise data for pickling</span>
+    <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;ESPRESSO_pre&quot;</span><span class="p">:</span> <span class="n">cleaned_pre_df</span><span class="p">,</span>
+        <span class="s2">&quot;ESPRESSO_post&quot;</span><span class="p">:</span> <span class="n">cleaned_post_df</span><span class="p">,</span>
+        <span class="s2">&quot;HARPS&quot;</span><span class="p">:</span> <span class="n">cleaned_harps_df</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Save to pickle file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data_dict</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">HIGHEST_PROTOCOL</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data cleand and pickled at </span><span class="si">{</span><span class="n">pickle_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error saving data to pickle: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unpickle_data"><a class="viewcode-back" href="../src.html#pickle_data.unpickle_data">[docs]</a><span class="k">def</span> <span class="nf">unpickle_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads data from a pickle file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath : str</span>
+<span class="sd">        Path to the pickle file to be loaded.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    data : dict</span>
+<span class="sd">        A dictionary containing the data loaded from the pickle file.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    FileNotFoundError</span>
+<span class="sd">        If the specified file does not exist.</span>
+<span class="sd">    EOFError</span>
+<span class="sd">        If the file is empty or improperly formatted, indicating end of file reached without any data.</span>
+<span class="sd">    Exception</span>
+<span class="sd">        For other issues that might occur during the loading process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Open the pickle file in binary read mode</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The file </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2"> was not found.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">EOFError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">EOFError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;No data found in file </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">. The file may be corrupted or empty.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred while loading the pickle file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Max Talberg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

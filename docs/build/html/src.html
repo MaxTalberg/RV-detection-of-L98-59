@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Config Loader &mdash; L98-59 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Pickle Tests" href="tests.html" />
+    <link rel="prev" title="Welcome to L98-59’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            L98-59
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Source Code Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Config Loader</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#config_loader.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#pickle-data">Pickle Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pickle_data.clean_and_pickle"><code class="docutils literal notranslate"><span class="pre">clean_and_pickle()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pickle_data.unpickle_data"><code class="docutils literal notranslate"><span class="pre">unpickle_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#periodogram">Periodogram</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#periodograms.compute_periodogram"><code class="docutils literal notranslate"><span class="pre">compute_periodogram()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#periodograms.convert_to_days"><code class="docutils literal notranslate"><span class="pre">convert_to_days()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#periodograms.convert_to_microhertz"><code class="docutils literal notranslate"><span class="pre">convert_to_microhertz()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#periodograms.frequency_to_period"><code class="docutils literal notranslate"><span class="pre">frequency_to_period()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#periodograms.plot_periodogram"><code class="docutils literal notranslate"><span class="pre">plot_periodogram()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#periodograms.run_periodogram_plot"><code class="docutils literal notranslate"><span class="pre">run_periodogram_plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#prior-transforms">Prior Transforms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prior_transforms.gaussian"><code class="docutils literal notranslate"><span class="pre">gaussian()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prior_transforms.half_gaussian"><code class="docutils literal notranslate"><span class="pre">half_gaussian()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prior_transforms.jeffreys"><code class="docutils literal notranslate"><span class="pre">jeffreys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prior_transforms.kipping_beta"><code class="docutils literal notranslate"><span class="pre">kipping_beta()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prior_transforms.modjeffreys"><code class="docutils literal notranslate"><span class="pre">modjeffreys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prior_transforms.rayleigh"><code class="docutils literal notranslate"><span class="pre">rayleigh()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prior_transforms.uniform"><code class="docutils literal notranslate"><span class="pre">uniform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#l98-59-model">L98-59 Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#l9859_model.L9859Analysis"><code class="docutils literal notranslate"><span class="pre">L9859Analysis</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.compute_planets_RV"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.compute_planets_RV()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.create_qp_kernel"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.create_qp_kernel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.derive_params"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.derive_params()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.dumper"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.dumper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.handle_results"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.handle_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.initialise_parameters"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.initialise_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.load_data"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.load_samples_from_file"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.load_samples_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.mean_fxn"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.mean_fxn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.myloglike"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.myloglike()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.myprior"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.myprior()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.planet_prior"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.planet_prior()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.run_analysis"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.run_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#l9859_model.L9859Analysis.setup_data"><code class="docutils literal notranslate"><span class="pre">L9859Analysis.setup_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#run-l98-59">Run L98-59</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#run_L9859.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Unit Test Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Pickle Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html#l98-59-tests">L98-59 Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">L98-59</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Config Loader</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/src.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="config-loader">
+<span id="src-documentation"></span><h1>Config Loader<a class="headerlink" href="#config-loader" title="Permalink to this heading"></a></h1>
+<p>The module <a class="reference internal" href="#module-config_loader" title="config_loader"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_loader</span></code></a> is responsible for loading configuration files, handling various formats and ensuring that configuration data is easily accessible throughout the application.</p>
+<span class="target" id="module-config_loader"></span><dl class="py function">
+<dt class="sig sig-object py" id="config_loader.load_config">
+<span class="sig-prename descclassname"><span class="pre">config_loader.</span></span><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/config_loader.html#load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#config_loader.load_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="pickle-data">
+<h1>Pickle Data<a class="headerlink" href="#pickle-data" title="Permalink to this heading"></a></h1>
+<p>The module <a class="reference internal" href="#module-pickle_data" title="pickle_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle_data</span></code></a> serialises and deserialises the preprocessed HARPS and ESPRESSO dataset using pickle.</p>
+<span class="target" id="module-pickle_data"></span><dl class="py function">
+<dt class="sig sig-object py" id="pickle_data.clean_and_pickle">
+<span class="sig-prename descclassname"><span class="pre">pickle_data.</span></span><span class="sig-name descname"><span class="pre">clean_and_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">espresso_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harps_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pickle_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pickle_data.html#clean_and_pickle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pickle_data.clean_and_pickle" title="Permalink to this definition"></a></dt>
+<dd><p>Cleans the data from the ESPRESSO and HARPS instruments and pickles the results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>espresso_path</strong> (<em>str</em>) – File path for the ESPRESSO data file.</p></li>
+<li><p><strong>harps_path</strong> (<em>str</em>) – File path for the HARPS data file.</p></li>
+<li><p><strong>pickle_path</strong> (<em>str</em>) – Destination path to save the pickled data.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function adjusts time values, filters out specific time points and handles
+missing values according to those specifified in D. S. Demangeon et al. (2021).
+The cleaned data is then saved into a pickle file format for persistence.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pickle_data.unpickle_data">
+<span class="sig-prename descclassname"><span class="pre">pickle_data.</span></span><span class="sig-name descname"><span class="pre">unpickle_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pickle_data.html#unpickle_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pickle_data.unpickle_data" title="Permalink to this definition"></a></dt>
+<dd><p>Loads data from a pickle file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – Path to the pickle file to be loaded.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>data</strong> – A dictionary containing the data loaded from the pickle file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If the specified file does not exist.</p></li>
+<li><p><strong>EOFError</strong> – If the file is empty or improperly formatted, indicating end of file reached without any data.</p></li>
+<li><p><strong>Exception</strong> – For other issues that might occur during the loading process.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="periodogram">
+<h1>Periodogram<a class="headerlink" href="#periodogram" title="Permalink to this heading"></a></h1>
+<p>The module <code class="xref py py-mod docutils literal notranslate"><span class="pre">periodogram</span></code> includes functions that calculate and plot the periodograms of the data.</p>
+<span class="target" id="module-periodograms"></span><dl class="py function">
+<dt class="sig sig-object py" id="periodograms.compute_periodogram">
+<span class="sig-prename descclassname"><span class="pre">periodograms.</span></span><span class="sig-name descname"><span class="pre">compute_periodogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002025227467386652</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5177264355163222</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples_per_peak</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ESPRESSO</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/periodograms.html#compute_periodogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#periodograms.compute_periodogram" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the Lomb-Scargle periodogram for given data and time arrays.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>time (array): Time data points.
+data (array): Data points corresponding to time.
+min_frequency (float): Minimum frequency to analyze.
+max_frequency (float): Maximum frequency to analyze.
+samples_per_peak (int): Number of samples per peak for the analysis.
+ESPRESSO (bool): Flag to indicate whether data is from ESPRESSO or not (default False).</p>
+</div></blockquote>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>tuple: Tuple containing frequency array, power array, and FAP thresholds.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="periodograms.convert_to_days">
+<span class="sig-prename descclassname"><span class="pre">periodograms.</span></span><span class="sig-name descname"><span class="pre">convert_to_days</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency_in_microhertz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/periodograms.html#convert_to_days"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#periodograms.convert_to_days" title="Permalink to this definition"></a></dt>
+<dd><p>Convert frequency from microhertz to days.</p>
+<section id="id1">
+<h2>Parameters:<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>frequency_in_microhertz (float): Frequency in microhertz.</p>
+</div></blockquote>
+</section>
+<section id="id2">
+<h2>Returns:<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>float: Frequency in days.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="periodograms.convert_to_microhertz">
+<span class="sig-prename descclassname"><span class="pre">periodograms.</span></span><span class="sig-name descname"><span class="pre">convert_to_microhertz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency_in_days</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/periodograms.html#convert_to_microhertz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#periodograms.convert_to_microhertz" title="Permalink to this definition"></a></dt>
+<dd><p>Convert frequency from days to microhertz.</p>
+<section id="id3">
+<h2>Parameters:<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>frequency_in_days (float): Frequency in days.</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2>Returns:<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>float: Frequency in microhertz.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="periodograms.frequency_to_period">
+<span class="sig-prename descclassname"><span class="pre">periodograms.</span></span><span class="sig-name descname"><span class="pre">frequency_to_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/periodograms.html#frequency_to_period"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#periodograms.frequency_to_period" title="Permalink to this definition"></a></dt>
+<dd><p>Convert frequency to period.</p>
+<section id="id5">
+<h2>Parameters:<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>frequency (float): Frequency in microhertz.</p>
+</div></blockquote>
+</section>
+<section id="id6">
+<h2>Returns:<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>float: Period in days.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="periodograms.plot_periodogram">
+<span class="sig-prename descclassname"><span class="pre">periodograms.</span></span><span class="sig-name descname"><span class="pre">plot_periodogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activity_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_periods</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002025227467386652</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5177264355163222</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples_per_peak</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ESPRESSO</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/periodograms.html#plot_periodogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#periodograms.plot_periodogram" title="Permalink to this definition"></a></dt>
+<dd><p>Generate periodogram plots for the given data.</p>
+<section id="id7">
+<h2>Parameters:<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>time (array): Time data points.
+data (DataFrame): Data containing the activity indices.
+activity_indices (list): List of indices to be plotted.
+true_periods (list): True periods for reference lines.
+period_colors (list): Colors for the reference lines.
+min_frequency (float): Minimum frequency to analyze.
+max_frequency (float): Maximum frequency to analyze.
+samples_per_peak (int): Number of samples per peak for the analysis.
+ESPRESSO (bool): Flag to indicate whether data is from ESPRESSO or not (default False).</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h2>Raises:<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><p>ValueError: If time or data arrays are empty.
+RuntimeError: If computation of periodograms fails.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="periodograms.run_periodogram_plot">
+<span class="sig-prename descclassname"><span class="pre">periodograms.</span></span><span class="sig-name descname"><span class="pre">run_periodogram_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ESPRESSO</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/periodograms.html#run_periodogram_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#periodograms.run_periodogram_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Run plotting for given instrument data.</p>
+</dd></dl>
+
+</section>
+<section id="prior-transforms">
+<h1>Prior Transforms<a class="headerlink" href="#prior-transforms" title="Permalink to this heading"></a></h1>
+<p>The module <a class="reference internal" href="#module-prior_transforms" title="prior_transforms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">prior_transforms</span></code></a> includes functions that map unit hyper-cube to actual parameter values,
+in accordance with format required by PyMultiNest.</p>
+<span class="target" id="module-prior_transforms"></span><dl class="py function">
+<dt class="sig sig-object py" id="prior_transforms.gaussian">
+<span class="sig-prename descclassname"><span class="pre">prior_transforms.</span></span><span class="sig-name descname"><span class="pre">gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prior_transforms.html#gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prior_transforms.gaussian" title="Permalink to this definition"></a></dt>
+<dd><p>Transforms a uniform variable into a Gaussian distributed variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Uniformly distributed variable [0, 1] from the unit hypercube.</p></li>
+<li><p><strong>mu</strong> (<em>float</em>) – Mean of the desired Gaussian distribution.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Standard deviation of the desired Gaussian distribution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A value sampled from a Gaussian distribution.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="prior_transforms.half_gaussian">
+<span class="sig-prename descclassname"><span class="pre">prior_transforms.</span></span><span class="sig-name descname"><span class="pre">half_gaussian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prior_transforms.html#half_gaussian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prior_transforms.half_gaussian" title="Permalink to this definition"></a></dt>
+<dd><p>Transforms a uniform variable into a half-Gaussian distributed variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Uniformly distributed variable [0, 1] from the unit hypercube.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Standard deviation of the desired half-Gaussian distribution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A value sampled from a half-Gaussian distribution.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="prior_transforms.jeffreys">
+<span class="sig-prename descclassname"><span class="pre">prior_transforms.</span></span><span class="sig-name descname"><span class="pre">jeffreys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prior_transforms.html#jeffreys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prior_transforms.jeffreys" title="Permalink to this definition"></a></dt>
+<dd><p>Transforms a uniform variable into a value sampled from a Jeffreys prior (log-uniform distribution).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Uniformly distributed variable [0, 1] from the unit hypercube.</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Lower bound of the distribution.</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Upper bound of the distribution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A value sampled from a log-uniform distribution spanning [a, b].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="prior_transforms.kipping_beta">
+<span class="sig-prename descclassname"><span class="pre">prior_transforms.</span></span><span class="sig-name descname"><span class="pre">kipping_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prior_transforms.html#kipping_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prior_transforms.kipping_beta" title="Permalink to this definition"></a></dt>
+<dd><p>Transforms a uniform variable into a value sampled from a Kipping Beta distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>theta</strong> (<em>float</em>) – Uniformly distributed variable [0, 1] from the unit hypercube.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A value sampled from a Beta distribution as defined by Kipping (2013) with shape parameters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="prior_transforms.modjeffreys">
+<span class="sig-prename descclassname"><span class="pre">prior_transforms.</span></span><span class="sig-name descname"><span class="pre">modjeffreys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prior_transforms.html#modjeffreys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prior_transforms.modjeffreys" title="Permalink to this definition"></a></dt>
+<dd><p>Transforms a uniform variable into a value sampled from a modified Jeffreys prior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Uniformly distributed variable [0, 1] from the unit hypercube.</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Knee location of the distribution.</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Upper bound of the distribution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A value sampled from a modified log-uniform distribution.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="prior_transforms.rayleigh">
+<span class="sig-prename descclassname"><span class="pre">prior_transforms.</span></span><span class="sig-name descname"><span class="pre">rayleigh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prior_transforms.html#rayleigh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prior_transforms.rayleigh" title="Permalink to this definition"></a></dt>
+<dd><p>Transforms a uniform variable into a value sampled from a truncated Rayleigh distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Uniformly distributed variable [0, 1] from the unit hypercube.</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – Scale parameter of the Rayleigh distribution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A value sampled from a Rayleigh distribution.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="prior_transforms.uniform">
+<span class="sig-prename descclassname"><span class="pre">prior_transforms.</span></span><span class="sig-name descname"><span class="pre">uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prior_transforms.html#uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prior_transforms.uniform" title="Permalink to this definition"></a></dt>
+<dd><p>Transforms a uniform variable into another uniformly distributed variable over [a, b].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>float</em>) – Uniformly distributed variable [0, 1] from the unit hypercube.</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Lower bound of the target uniform distribution.</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Upper bound of the target uniform distribution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A value uniformly distributed between [a, b].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="l98-59-model">
+<h1>L98-59 Model<a class="headerlink" href="#l98-59-model" title="Permalink to this heading"></a></h1>
+<p>The module <a class="reference internal" href="#module-l9859_model" title="l9859_model"><code class="xref py py-mod docutils literal notranslate"><span class="pre">l9859_model</span></code></a> is a class responsible modelling the L98-59 system.</p>
+<span class="target" id="module-l9859_model"></span><dl class="py class">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">l9859_model.</span></span><span class="sig-name descname"><span class="pre">L9859Analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_planet_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_fwhm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_sindex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polychord_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.compute_planets_RV">
+<span class="sig-name descname"><span class="pre">compute_planets_RV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.compute_planets_RV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.compute_planets_RV" title="Permalink to this definition"></a></dt>
+<dd><p>Computes the total radial velocity (RV) signal from the planets.</p>
+<p>This method calculates the combined RV signal from all included planets using
+the RadVel library, based on the provided time array and parameter vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T0</strong> (<em>array_like</em>) – Array of observation times.</p></li>
+<li><p><strong>q</strong> (<em>array_like</em>) – Input parameter vector containing orbital parameters for the planets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RV_total</strong> – The total RV signal from all included planets.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>KeyError</strong> – If required keys are missing in the parameter vector.</p></li>
+<li><p><strong>Exception</strong> – If there is an error in computing the RV model.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.create_qp_kernel">
+<span class="sig-name descname"><span class="pre">create_qp_kernel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.create_qp_kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.create_qp_kernel" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a Quasi-Periodic (QP) kernel for Gaussian Process (GP) modeling.</p>
+<p>This method sets up a QP kernel by combining an exponential sine-squared kernel
+(periodic kernel) with an exponential squared kernel (decay kernel). It then
+initializes GP models for RV, FWHM, and S-index data based on the inclusion flags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – If there is an error in creating or initialising the kernels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.derive_params">
+<span class="sig-name descname"><span class="pre">derive_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.derive_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.derive_params" title="Permalink to this definition"></a></dt>
+<dd><p>Derives eccentricity parameters for the planets from the input parameter vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>q</strong> (<em>array_like</em>) – Input parameter vector containing <cite>secosw</cite> and <cite>sesinw</cite> for planets.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – If required keys are missing in the parameter vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.dumper">
+<span class="sig-name descname"><span class="pre">dumper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">live</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logweights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logZ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logZerr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.dumper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.dumper" title="Permalink to this definition"></a></dt>
+<dd><p>Callback function to process the state of the PolyChord run.</p>
+<p>This method is called during the PolyChord run to process and print information
+about the last dead point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>live</strong> (<em>list</em>) – List of live points.</p></li>
+<li><p><strong>dead</strong> (<em>list</em>) – List of dead points.</p></li>
+<li><p><strong>logweights</strong> (<em>list</em>) – Logarithm of the weights of the dead points.</p></li>
+<li><p><strong>logZ</strong> (<em>float</em>) – Logarithm of the evidence.</p></li>
+<li><p><strong>logZerr</strong> (<em>float</em>) – Error in the logarithm of the evidence.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IndexError</strong> – If the dead list is empty.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.handle_results">
+<span class="sig-name descname"><span class="pre">handle_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test_equal_weights.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'triangle_plot.pdf'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.handle_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.handle_results" title="Permalink to this definition"></a></dt>
+<dd><p>Handles the results of the analysis by loading samples, generating plots,
+and saving the output.</p>
+<p>This method loads the sample data from a specified file, generates a triangle
+plot of the posterior distributions, prints summary statistics, and saves
+the results to a pickle file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the file containing the sample data (default is “test_equal_weights.txt”).</p></li>
+<li><p><strong>plot_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the output plot file (default is “triangle_plot.pdf”).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If the specified sample file does not exist.</p></li>
+<li><p><strong>IOError</strong> – If there is an error in reading the sample file or writing the pickle file.</p></li>
+<li><p><strong>Exception</strong> – If there is an error in processing the results or generating the plot.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.initialise_parameters">
+<span class="sig-name descname"><span class="pre">initialise_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.initialise_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.initialise_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>Initialises the parameter sets and derived parameters for the analysis.</p>
+<p>Sets up the general, FWHM, S-index, and planetary parameters, and constructs
+parameter dictionaries and lists in both plain and LaTeX formats.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.load_data" title="Permalink to this definition"></a></dt>
+<dd><p>Loads and preprocesses the data from the specified filepath.</p>
+<p>Processes the CSV file to extract time, radial velocity, FWHM, and BIS data along with their errors.
+Sets up derived parameters for the data such as maximum jitter and statistical measures (median, std, peak-to-peak).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.load_samples_from_file">
+<span class="sig-name descname"><span class="pre">load_samples_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.load_samples_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.load_samples_from_file" title="Permalink to this definition"></a></dt>
+<dd><p>Loads samples from a specified file.</p>
+<p>This method reads the sample data from a text file in the output directory
+and returns it as a NumPy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Name of the file containing the sample data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>samples</strong> – The sample data loaded from the file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If the specified file does not exist.</p></li>
+<li><p><strong>IOError</strong> – If there is an error in reading the file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.mean_fxn">
+<span class="sig-name descname"><span class="pre">mean_fxn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.mean_fxn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.mean_fxn" title="Permalink to this definition"></a></dt>
+<dd><p>Computes the mean model for RV, FWHM, and S-index data with appropriate offsets.</p>
+<p>This method calculates the mean model for the radial velocity (RV), full width
+at half maximum (FWHM), and S-index data, applying necessary offsets for different
+observational datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>T0</strong> (<em>array_like</em>) – Array of observation times.</p></li>
+<li><p><strong>q</strong> (<em>array_like</em>) – Input parameter vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>results</strong> – A list containing the mean models for RV, FWHM, and S-index data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>KeyError</strong> – If required keys are missing in the parameter vector.</p></li>
+<li><p><strong>Exception</strong> – If there is an error in computing the mean model.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.myloglike">
+<span class="sig-name descname"><span class="pre">myloglike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.myloglike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.myloglike" title="Permalink to this definition"></a></dt>
+<dd><p>Computes the log likelihood for the given parameters using Gaussian Processes.</p>
+<p>This method calculates the log likelihood of the observed data given the
+parameter vector <cite>theta</cite>, using Gaussian Processes (GP) for modeling the
+Radial Velocity (RV), Full Width at Half Maximum (FWHM), and S-index data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>theta</strong> (<em>array_like</em>) – Input parameter vector.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>log_likelihood</strong> (<em>float</em>) – The log likelihood of the observed data given the parameters.</p></li>
+<li><p><strong>dps</strong> (<em>list</em>) – Derived parameters such as eccentricities.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>KeyError</strong> – If required keys are missing in the parameter vector.</p></li>
+<li><p><strong>Exception</strong> – If there is an error in computing the log likelihood.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.myprior">
+<span class="sig-name descname"><span class="pre">myprior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.myprior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.myprior" title="Permalink to this definition"></a></dt>
+<dd><p>Applies prior transformations to the input parameter vector.</p>
+<p>This method adjusts the input parameter vector using predefined prior
+distributions for various parameters including RV, FWHM, and S-index parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>q</strong> (<em>array_like</em>) – Input parameter vector.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>qq</strong> – The parameter vector with prior transformations applied.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>KeyError</strong> – If required keys are missing in the parameter vector.</p></li>
+<li><p><strong>Exception</strong> – If there is an error during the prior transformations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.planet_prior">
+<span class="sig-name descname"><span class="pre">planet_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.planet_prior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.planet_prior" title="Permalink to this definition"></a></dt>
+<dd><p>Applies prior transformations to the planetary parameters.</p>
+<p>This method adjusts the input parameter vector for the planets using predefined
+prior distributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qq</strong> (<em>array_like</em>) – Input parameter vector containing planetary parameters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>qq</strong> – The parameter vector with prior transformations applied.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>KeyError</strong> – If required keys are missing in the parameter vector.</p></li>
+<li><p><strong>Exception</strong> – If there is an error during the prior transformations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.run_analysis">
+<span class="sig-name descname"><span class="pre">run_analysis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.run_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.run_analysis" title="Permalink to this definition"></a></dt>
+<dd><p>Runs the PolyChord analysis.</p>
+<p>This method sets up the PolyChord settings and runs the PolyChord analysis
+using the defined log-likelihood, prior, and dumper functions. It also records
+the runtime of the analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – If there is an error during the PolyChord run.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="l9859_model.L9859Analysis.setup_data">
+<span class="sig-name descname"><span class="pre">setup_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/l9859_model.html#L9859Analysis.setup_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#l9859_model.L9859Analysis.setup_data" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up the data for analysis by combining and adjusting observational data.</p>
+<p>Combines radial velocity (RV), full width at half maximum (FWHM), and S-index data
+from different instruments and time periods. Adjusts time and scales FWHM data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – If required keys are missing in the input data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="run-l98-59">
+<h1>Run L98-59<a class="headerlink" href="#run-l98-59" title="Permalink to this heading"></a></h1>
+<p>The module <code class="xref py py-mod docutils literal notranslate"><span class="pre">run_l9859</span></code> is the function used to run the L98-59 model.</p>
+<span class="target" id="module-run_L9859"></span><dl class="py function">
+<dt class="sig sig-object py" id="run_L9859.main">
+<span class="sig-prename descclassname"><span class="pre">run_L9859.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/run_L9859.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#run_L9859.main" title="Permalink to this definition"></a></dt>
+<dd><p>Main function to run nested sampling Gaussian Process (GP) regression model
+on the L98-59 system, using radial velocity (RV) data from HARPS and ESPRESSO.</p>
+<p>It configures the analysis based on specified parameters, including the
+inclusion of specific dataset features and algorithmic settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – General exception raised during execution of the analysis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to L98-59’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tests.html" class="btn btn-neutral float-right" title="Pickle Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Max Talberg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

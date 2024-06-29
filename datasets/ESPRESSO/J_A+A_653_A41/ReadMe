@@ -1,0 +1,120 @@
+J/A+A/653/A41       L 98-59 (TOI-175) ESPRESSO observations   (Demangeon+, 2021)
+================================================================================
+Warm terrestrial planet with half the mass of Venus transiting a nearby star.
+    Demangeon O.D.S., Zapatero Osorio M.R., Alibert Y., Barros S.C.C.,
+    Adibekyan V., H.M.Tabernero, Antoniadis-Karnavas A., Camacho J.D.,
+    Suarez Mascareno A., Oshagh M., Micela G., Sousa S.G., Lovis C., Pepe F.A.,
+    Rebolo R., Cristiani S., Santos N.C., Allart R., AllendePrieto C.,
+    Bossini D., Bouchy F., Cabral A., Damasso M., Di Marcantonio P.,
+    D'Odorico V., D.Ehrenreich, Faria J., Figueira P., Genova Santos R.,
+    Haldemann J., Hara N., Gonzalez Hernandez J.I., Lavie B., Lillo-Box J.,
+    Lo Curto G., Martins C.J.A.P., Megevand D., Mehner A., Molaro P.,
+    Nunes N.J., Palle E., Pasquini L., Poretti E., Sozzetti A., Udry S.
+    <Astron. Astrophys. 653, A41 (2021)>
+    =2021A&A...653A..41D        (SIMBAD/NED BibCode)
+================================================================================
+ADC_Keywords: Stars, double and multiple ; Exoplanets ; Radial velocities
+Keywords: techniques: radial velocities - techniques: photometric -
+          planet and satellites: detection -
+          planets and satellites: terrestrial planets -
+          planets and satellites: composition - stars: individual: L 98-59
+
+Abstract:
+    In recent years, the advent of a new generation of radial velocity
+    instruments has allowed us to detect lower and lower mass planets,
+    breaking the one Earth-mass barrier. Here we report a new milestone in
+    this context, by announcing the detection of the lightest planet
+    measured so far using radial velocities: L 98-59 b, a rocky planet
+    with half the mass of Venus which is part of a system composed of
+    three known transiting terrestrial planets (planets b to d).
+
+    We announce the discovery of a fourth non-transiting planet with a
+    minimum mass of 3.06_-0.37_^+0.33^M_{Earth)_ and an orbital period
+    of 12.796_-0.019_^+0.020^ days and report hints for the presence
+    of a fifth non-transiting terrestrial planet. If confirmed, with a
+    minimum mass of 2.46_-0.82_^+0.66^M_{Earth}_ and an orbital period
+    23.15_-0.17_^+0.60^ days, this planet would sit in the middle of
+    the habitable zone of the L 98-59 system.
+
+    L 98-59 is a bright M-dwarf located 10.6pc away. Positioned at the
+    border of the continuous viewing zone of the James Webb space
+    telescope, this system is destined to become a corner stone for
+    comparative exoplanetology of terrestrial planets. The three
+    transiting planets have transmission spectrum metrics ranging from 49
+    to 255 which undoubtedly make them prime targets for atmospheric
+    characterization with the James Webb space telescope, the Hubble space
+    telescope, Ariel or ground-based facilities like NIRPS or ESPRESSO.
+    With equilibrium temperature ranging from 416 to 627K, they offer a
+    unique opportunity to study the diversity of warm terrestrial planets
+    without the unknowns associated with different host stars.
+
+    L 98-59 b and c have densities of 3.6_-1.5_^+1.4^ and
+    4.57_-0.85_^+0.77^g/cm^3^ respectively and have very similar bulk
+    compositions with a small iron core, representing only 12 to 14% of
+    the total mass, and a small amount of water. However, with a density
+    of 2.95_-0.51_^+0.79^g/cm^3^ and despite a similar core mass fraction,
+    up to 30% of L 98-59 d's mass could be made of water.
+
+Description:
+    We present the measurements from our radial velocity campaign of
+    L 98-59 realized with the ESPRESSO spectrograph. From these data and
+    the HARPS and TESS data available in the literature, we performed the
+    characterization of the L 98-59 planetary system.
+
+Objects:
+    ----------------------------------------------
+       RA   (2000)   DE        Designation(s)
+    ----------------------------------------------
+    08 18 07.62  -68 18 46.8   L 98-59 = TOI 175
+    ----------------------------------------------
+
+File Summary:
+--------------------------------------------------------------------------------
+ FileName      Lrecl  Records   Explanations
+--------------------------------------------------------------------------------
+ReadMe            80        .   This file
+espresso.dat     181       66   Radial velocities and activity indicators
+                                 measurement on L 98-59 with the ESPRESSO
+                                 spectrograph
+--------------------------------------------------------------------------------
+
+See also:
+  J/A+A/629/A111 : L 98-59 (TOI 175) HARPS observations
+  https://mast.stsci.edu/portal/Mashup/Clients/Mast/Portal.html : TESS data
+
+Byte-by-byte Description of file: espresso.dat
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label     Explanations
+--------------------------------------------------------------------------------
+   1- 18 F18.12 d       Time      Time of the measurement, UTC (BJD-2400000)
+  20- 32  F13.6 m/s     RV        Radial velocity
+  34- 43  F10.6 m/s   e_RV        Uncertainty on the radial velocity (1 sigma)
+  45- 56  F12.6 m/s     FWHM      Full width at half maximum of the
+                                   cross-correlation function
+  58- 67  F10.6 m/s   e_FWHM      Uncertainty on the full width at half maximum
+                                   (1 sigma)
+  69- 80  F12.6 m/s     BIS       Bisector span of the cross-correlation
+                                   function
+  82- 91  F10.6 m/s   e_BIS       Uncertainty on the bisector span (1 sigma)
+  93-101  F9.6  ---     Contrast  Contrast of the cross-correlation function
+ 103-110  F8.6  ---   e_Contrast  Uncertainty on the contrast (1 sigma)
+ 112-119  F8.6  ---     Sindex    Mont-Wilson S index
+ 121-128  F8.6  ---   e_Sindex    Uncertainty on the S index (1 sigma)
+ 130-138  F9.6  ---     Halpha    Depth of the Halpha line
+ 140-147  F8.6  ---   e_Halpha    Uncertainty on the depth of the Halpha line
+                                   (1 sigma)
+ 149-157  F9.6  ---     NaD       Depth of the sodium doublet lines
+ 159-166  F8.6  ---   e_NaD       Uncertainty on the depth of the sodium doublet
+                                   lines (1 sigma)
+ 168-176  F9.6  m/s     BERV      Barycentric Earth Radial Velocity
+ 178-181  A4    ---     Inst      String indicating if the measurement has been
+                                   acquired before (Pre) or after (Post) the
+                                   June 2019 replacement of the fiber-link of
+                                   ESPRESSO
+--------------------------------------------------------------------------------
+
+Acknowledgements:
+    Olivier Demangeon, olivier.demangeon(at)astro.up.pt
+
+================================================================================
+(End)                                        Patricia Vannier [CDS]  15-Jul-2021

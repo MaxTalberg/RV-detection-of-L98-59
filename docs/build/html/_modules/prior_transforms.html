@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>prior_transforms &mdash; L98-59 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            L98-59
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Source Code Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../src.html">Config Loader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#pickle-data">Pickle Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#periodogram">Periodogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#prior-transforms">Prior Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#l98-59-model">L98-59 Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.html#run-l98-59">Run L98-59</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Unit Test Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html">Pickle Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html#l98-59-tests">L98-59 Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">L98-59</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">prior_transforms</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for prior_transforms</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">erfcinv</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span><span class="p">,</span> <span class="n">halfnorm</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Prior transform functions: map unit hyper-cube to actual parameter values,</span>
+<span class="sd">in accordance with format required by PyMultiNest.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="half_gaussian"><a class="viewcode-back" href="../src.html#prior_transforms.half_gaussian">[docs]</a><span class="k">def</span> <span class="nf">half_gaussian</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms a uniform variable into a half-Gaussian distributed variable.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Uniformly distributed variable [0, 1] from the unit hypercube.</span>
+<span class="sd">    sigma : float</span>
+<span class="sd">        Standard deviation of the desired half-Gaussian distribution.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        A value sampled from a half-Gaussian distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theta_scaled</span> <span class="o">=</span> <span class="n">halfnorm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">theta_scaled</span></div>
+
+
+<div class="viewcode-block" id="gaussian"><a class="viewcode-back" href="../src.html#prior_transforms.gaussian">[docs]</a><span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms a uniform variable into a Gaussian distributed variable.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Uniformly distributed variable [0, 1] from the unit hypercube.</span>
+<span class="sd">    mu : float</span>
+<span class="sd">        Mean of the desired Gaussian distribution.</span>
+<span class="sd">    sigma : float</span>
+<span class="sd">        Standard deviation of the desired Gaussian distribution.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        A value sampled from a Gaussian distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theta_scaled</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">sigma</span> <span class="o">*</span> <span class="p">(</span><span class="mf">2.0</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">erfcinv</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">theta_scaled</span></div>
+
+
+<div class="viewcode-block" id="jeffreys"><a class="viewcode-back" href="../src.html#prior_transforms.jeffreys">[docs]</a><span class="k">def</span> <span class="nf">jeffreys</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms a uniform variable into a value sampled from a Jeffreys prior (log-uniform distribution).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Uniformly distributed variable [0, 1] from the unit hypercube.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Lower bound of the distribution.</span>
+<span class="sd">    b : float</span>
+<span class="sd">        Upper bound of the distribution.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        A value sampled from a log-uniform distribution spanning [a, b].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theta_scaled</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">theta_scaled</span></div>
+
+
+<div class="viewcode-block" id="modjeffreys"><a class="viewcode-back" href="../src.html#prior_transforms.modjeffreys">[docs]</a><span class="k">def</span> <span class="nf">modjeffreys</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms a uniform variable into a value sampled from a modified Jeffreys prior.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Uniformly distributed variable [0, 1] from the unit hypercube.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Knee location of the distribution.</span>
+<span class="sd">    b : float</span>
+<span class="sd">        Upper bound of the distribution.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        A value sampled from a modified log-uniform distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theta_scaled</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">b</span> <span class="o">/</span> <span class="n">a</span><span class="p">))</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="o">-</span> <span class="n">a</span>
+    <span class="k">return</span> <span class="n">theta_scaled</span></div>
+
+
+<div class="viewcode-block" id="kipping_beta"><a class="viewcode-back" href="../src.html#prior_transforms.kipping_beta">[docs]</a><span class="k">def</span> <span class="nf">kipping_beta</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms a uniform variable into a value sampled from a Kipping Beta distribution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Uniformly distributed variable [0, 1] from the unit hypercube.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        A value sampled from a Beta distribution as defined by Kipping (2013) with shape parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">0.867</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mf">3.03</span>
+    <span class="n">theta_scaled</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">theta_scaled</span></div>
+
+
+<div class="viewcode-block" id="rayleigh"><a class="viewcode-back" href="../src.html#prior_transforms.rayleigh">[docs]</a><span class="k">def</span> <span class="nf">rayleigh</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms a uniform variable into a value sampled from a truncated Rayleigh distribution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Uniformly distributed variable [0, 1] from the unit hypercube.</span>
+<span class="sd">    sigma : float</span>
+<span class="sd">        Scale parameter of the Rayleigh distribution.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        A value sampled from a Rayleigh distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theta_scaled</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">theta_scaled</span></div>
+
+
+<div class="viewcode-block" id="uniform"><a class="viewcode-back" href="../src.html#prior_transforms.uniform">[docs]</a><span class="k">def</span> <span class="nf">uniform</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms a uniform variable into another uniformly distributed variable over [a, b].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Uniformly distributed variable [0, 1] from the unit hypercube.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Lower bound of the target uniform distribution.</span>
+<span class="sd">    b : float</span>
+<span class="sd">        Upper bound of the target uniform distribution.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        A value uniformly distributed between [a, b].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theta_scaled</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">theta</span>
+    <span class="k">return</span> <span class="n">theta_scaled</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Max Talberg.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
