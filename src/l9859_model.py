@@ -701,7 +701,7 @@ class L9859Analysis:
         Computes the log likelihood for the given parameters using Gaussian Processes.
 
         This method calculates the log likelihood of the observed data given the
-        parameter vector `theta`, using Gaussian Processes (GP) for modeling the
+        parameter vector theta, using Gaussian Processes (GP) for modeling the
         Radial Velocity (RV), Full Width at Half Maximum (FWHM), and S-index data.
 
         Parameters
