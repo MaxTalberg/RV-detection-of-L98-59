@@ -1,5 +1,5 @@
 # Use an official Miniconda runtime as a parent image
-FROM continuumio/miniconda3
+FROM continuumio/miniconda3:4.10.3
 
 # Set the working directory to /app
 WORKDIR /app
@@ -19,4 +19,4 @@ ENV PYTHONUNBUFFERED=1
 ENV NAME l9859-env
 
 # Run main.py when the container launches
-CMD ["conda", "run", "--no-capture-output", "-n", "l9859-env", "python", "src/main.py"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "l9859-env", "python", "/app/src/main.py"]
