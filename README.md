@@ -141,7 +141,10 @@ The full L98-59 model:(planet b: True, FWHM: True, S-index:True) took approximat
 
 These times can be reduced by increasing the prescion criteria and decreasing the number of repeats in the `run_l9859.py` script.
 
+## Notes
+The executive summary `report/ExecutiveSummary.pdf` contains a summary of the project and the results in the larger context of exoplanet detection. word count: 973
 
+The full report `report/Report.pdf` contains a detailed description of the project, the methods used, the results and the implications of the results. word count: 6,879
 
 ## Acknowledgements
 I want to thank my thesis supervisor, Dr. Vinesh Rajpaul, for his guidance, constant support
