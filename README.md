@@ -126,7 +126,31 @@ The documentation can be accessed [here](https://rv-detection-of-l98-59.readthed
      docker run -it --rm -v host_directory:/app/plots l9859-project
      ```
         - Replace `host_directory` with the path to the directory where you want to save the plots, for example: `/path/to/plots` and all the images will be saved into a folder named `plots`, acompanying information will be in the terminal output.
+   - Running PolyChordLite:
+        - Currently, we have not been able to successfully configure Docker to work with PolyChord Lite. We are investigating this issue and plan to provide updates as soon as a solution is found.
 
+## Specifications
+On a laptop with the following specifications:
+- Model: MacBook Pro
+- Processor: Apple M2 chip
+- Memory: 16GB RAM
+
+The smallest L98-59 model:(planet b: False, FWHM: False, S-index:False) took approximately 20 minutes to complete.
+
+The full L98-59 model:(planet b: True, FWHM: True, S-index:True) took approximately 2 hours to complete.
+
+These times can be reduced by increasing the prescion criteria and decreasing the number of repeats in the `run_l9859.py` script.
+
+
+
+## Acknowledgements
+I want to thank my thesis supervisor, Dr. Vinesh Rajpaul, for his guidance, constant support
+and GP wisdom. His expertise was key to finishing this thesis. Our late-night meetings, despite
+the frequent bad call quality, were especially memorable and instrumental in my progress.
+
+I’m also very grateful to Dr. James Fergusson, the course director, for giving me this
+fantastic opportunity. This past year has been unforgettable and has significantly changed the
+trajectory of my life.
 
 ## License
 
