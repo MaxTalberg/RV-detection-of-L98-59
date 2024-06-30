@@ -45,20 +45,21 @@ The Data Analysis Pipeline contains the code to preprocess and produce periodogr
       ```bash
       conda activate l9859-env
       ```
+   - The L98-59 model requires PolyChordLite (Handley et al. (2015)) be installed first:
+        ```bash
+        git clone https://github.com/PolyChord/PolyChordLite.git
+        cd PolyChordLite
+        make
+        pip install .
+        cd ..
+        ```
 3. **Running the script:**
 
    - Running the main script to preprocess and produce periodograms from the HARPS and ESPRESSO datasets:
         ```bash
      python src/main.py
         ```
-   - Running the L98-59 model requires PolyChordLite (Handley et al. (2015)) be installed first:
-        ```bash
-        git clone https://github.com/PolyChord/PolyChordLite.git
-        cd PolyChordLite
-        python setup.py install
-        cd ..
-        ```
-   - The L98-59 model is ran from, the `run_l9859.py` script and can be tuned with different parameters:
+   - The L98-59 model is ran from, the `run_l9859.py` script where one can be tune the L98-59 model with different parameters:
         ```bash
         python src/run_l9859.py
         ```
