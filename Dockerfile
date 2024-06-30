@@ -19,10 +19,10 @@ RUN conda env create -f environment.yml
 SHELL ["conda", "run", "-n", "l9859-env", "/bin/bash", "-c"]
 
 # Install PolyChord from source
-RUN git clone https://github.com/PolyChord/PolyChordLite.git \
-    && cd PolyChordLite \
-    && make \
-    && pip install .
+RUN git clone https://github.com/PolyChord/PolyChordLite.git
+RUN cd PolyChordLite
+RUN make
+RUN pip install .
 
 # Define environment variable
 ENV NAME l9859-env
