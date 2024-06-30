@@ -270,7 +270,7 @@ def plot_periodogram(
     plt.tight_layout()
     plt.savefig("plots/{}_periodogram.png".format("ESPRESSO" if ESPRESSO else "HARPS"))
     print(
-        f"Plot saved successfully to output_dir/{'ESPRESSO' if ESPRESSO else 'HARPS'}_periodogram.png"
+        f"Plot saved successfully to plots/{'ESPRESSO' if ESPRESSO else 'HARPS'}_periodogram.png"
     )
 
 

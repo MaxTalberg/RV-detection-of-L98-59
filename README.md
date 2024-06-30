@@ -27,7 +27,7 @@ The Data Analysis Pipeline contains the code to preprocess and produce periodogr
 ### Setting Up the Project
 
 1. **Clone the repository:**
-   - Clone the repository from GitLab:
+   - Shallow clone the repository from GitLab:
      ```bash
      git clone --depth 1 git@gitlab.developers.cam.ac.uk:phy/data-intensive-science-mphil/projects/mt942.git
      ```
@@ -49,11 +49,19 @@ The Data Analysis Pipeline contains the code to preprocess and produce periodogr
 
    - Running the main script to preprocess and produce periodograms from the HARPS and ESPRESSO datasets:
         ```bash
-     python ex1/run_ex1.py
+     python src/main.py
         ```
-   - Running the L98-59 model, the `run_l9859.py` script can be tuned to run the model with different parameters:
-          ```bash
-          ```
+   - Running the L98-59 model requires PolyChordLite (Handley et al. (2015)) be installed first:
+        ```bash
+        git clone https://github.com/PolyChord/PolyChordLite.git
+        cd PolyChordLite
+        python setup.py install
+        cd ..
+        ```
+   - The L98-59 model is ran from, the `run_l9859.py` script and can be tuned with different parameters:
+        ```bash
+        python src/run_l9859.py
+        ```
 
 ## Running the script on Docker
 
