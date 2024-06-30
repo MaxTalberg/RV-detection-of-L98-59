@@ -1,4 +1,4 @@
-name: l9859-env
+name: L9859-env
 channels:
   - conda-forge
   - defaults
@@ -60,6 +60,7 @@ dependencies:
   - pip:
       - alabaster==0.7.13
       - anesthetic==2.8.1
+      - appdirs==1.4.4
       - appnope==0.1.4
       - astropy==5.2.2
       - asttokens==2.4.1
@@ -70,6 +71,7 @@ dependencies:
       - bleach==6.1.0
       - certifi==2024.6.2
       - comm==0.2.2
+      - commonmark==0.9.1
       - contourpy==1.1.1
       - corner==2.2.1
       - coverage==5.5
@@ -129,16 +131,25 @@ dependencies:
       - pyyaml==6.0.1
       - pyzmq==26.0.3
       - radvel==1.4.11
+      - rebound==4.4.1
+      - recommonmark==0.7.1
       - referencing==0.35.1
+      - rinoh-typeface-dejavuserif==0.1.3
+      - rinoh-typeface-texgyrecursor==0.1.1
+      - rinoh-typeface-texgyreheros==0.1.1
+      - rinoh-typeface-texgyrepagella==0.1.1
+      - rinohtype==0.5.4
       - rpds-py==0.18.1
       - scipy==1.10.1
       - six==1.16.0
       - snowballstemmer==2.2.0
       - soupsieve==2.5
       - sphinx==7.1.2
+      - sphinx-rtd-theme==2.0.0
       - sphinxcontrib-applehelp==1.0.4
       - sphinxcontrib-devhelp==1.0.2
       - sphinxcontrib-htmlhelp==2.0.1
+      - sphinxcontrib-jquery==4.1
       - sphinxcontrib-jsmath==1.0.1
       - sphinxcontrib-qthelp==1.0.3
       - sphinxcontrib-serializinghtml==1.1.5
@@ -151,4 +162,4 @@ dependencies:
       - wcwidth==0.2.13
       - webencodings==0.5.1
       - zipp==3.19.1
-prefix: /Users/maxtalberg/miniconda3/envs/l9859-env
+prefix: /Users/maxtalberg/miniconda3/envs/L9859-env
