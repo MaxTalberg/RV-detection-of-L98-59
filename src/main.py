@@ -19,6 +19,5 @@ def main():
     run_periodogram_plot(pickle_path, ESPRESSO=True)
     run_periodogram_plot(pickle_path, ESPRESSO=False)
 
-
 if __name__ == "__main__":
     main()
