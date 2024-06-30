@@ -20,8 +20,7 @@ SHELL ["conda", "run", "-n", "l9859-env", "/bin/bash", "-c"]
 
 # Install PolyChord from source
 RUN git clone https://github.com/PolyChord/PolyChordLite.git
-RUN cd PolyChordLite
-RUN make
+RUN cd PolyChordLite && make
 RUN pip install .
 
 # Define environment variable
