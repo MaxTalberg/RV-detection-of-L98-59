@@ -1028,9 +1028,10 @@ class L9859Analysis:
             print(
                 f"L98-59 model with planet b {self.include_planet_b}, FWHM {self.include_fwhm}, S-index {self.include_sindex}"
             )
-            print("Finshed running in: {self.runtime}")
-            print(f"Saving results to {self.output_directory, pickle_file_name}")
-            print(f"Saving plots to {self.output_directory, plot_path}")
+            print("------------------------------------------------------------")
+            print(f"Finshed running in: {self.runtime} seconds")
+            print(f"Saving results to {pickle_file_name}")
+            print(f"Saving plots to {plot_path}")
 
             if self.runtime > 25:
                 with open(pickle_file_name, "wb") as f:
