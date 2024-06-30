@@ -1,4 +1,4 @@
-name: l9859-env-test-one
+name: l9859-env-test-two
 channels:
   - conda-forge
   - defaults
@@ -8,7 +8,7 @@ dependencies:
   - hdf5=1.12.1
   - libgfortran=5.0.0
   - libgfortran5=11.3.0
-  - numpy=1.24.32
+  - numpy=1.24.3
   - pip=24.0=py38hca03da5_0
   - python=3.8.18
   - pip:
