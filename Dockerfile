@@ -4,6 +4,13 @@ FROM continuumio/miniconda3:4.10.3
 # Set the working directory to /app
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gfortran \
+    libopenblas-dev \
+    liblapack-dev \
+    git
+
 COPY . /app
 
 RUN conda env create -f /app/environment.yml
