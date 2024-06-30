@@ -82,7 +82,7 @@ The Data Analysis Pipeline contains the code to preprocess and produce periodogr
       ```
    - Build image:
      ```bash
-     docker build -t ska-project .
+     docker build -t l9859-project .
      ```
 
 3. **Running the script:**
