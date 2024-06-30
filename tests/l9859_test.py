@@ -29,7 +29,7 @@ class TestL9859(unittest.TestCase):
         """
         # Initialise the L9859Analysis object with predefined parameters and mocks
         self.analysis = L9859Analysis(
-            filepath="datasets/cleaned_data_20240531.pickle",
+            filepath="../datasets/cleaned_data_20240531.pickle",
             include_planet_b=True,
             include_fwhm=True,
             include_sindex=True,
@@ -42,7 +42,7 @@ class TestL9859(unittest.TestCase):
         """
         # Check the filepath is stored correctly
         self.assertEqual(
-            self.analysis.filepath, "datasets/cleaned_data_20240531.pickle"
+            self.analysis.filepath, "../datasets/cleaned_data_20240531.pickle"
         )
 
         # Check feature inclusion flags
@@ -142,7 +142,7 @@ class TestL9859(unittest.TestCase):
         """
         # Reinitialise analysis with no additional features
         self.analysis = L9859Analysis(
-            filepath="datasets/cleaned_data_20240531.pickle",
+            filepath="../datasets/cleaned_data_20240531.pickle",
             include_planet_b=False,
             include_fwhm=False,
             include_sindex=False,

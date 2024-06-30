@@ -24,7 +24,7 @@ class TestPickles(unittest.TestCase):
             "HARPS": {"RV": [7, 8, 9]},
         }
         with patch("pickle.load", return_value=mock_data):
-            X = unpickle_data("datasets/cleaned_data_20240531.pickle")
+            X = unpickle_data("../datasets/cleaned_data_20240531.pickle")
             self.assertIn("ESPRESSO_pre", X, "Dataset keys missing")
             self.assertIn("ESPRESSO_post", X, "Dataset keys missing")
             self.assertIn("HARPS", X, "Dataset keys missing")

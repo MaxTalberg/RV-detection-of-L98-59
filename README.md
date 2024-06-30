@@ -65,35 +65,6 @@ The Data Analysis Pipeline contains the code to preprocess and produce periodogr
         python src/run_l9859.py
         ```
 
-## Running the L98-59 Model on Docker
-
-### Setting Up the Project
-
-1. **Clone the repository:**
-   - Shallow clone the repository from GitLab:
-     ```bash
-     git clone --depth 1 git@gitlab.developers.cam.ac.uk:phy/data-intensive-science-mphil/projects/mt942.git
-     ```
-
-2. **Build the Docker image:**
-    - Navigate to the project directory:
-      ```bash
-      cd mt942
-      ```
-   - Build image:
-     ```bash
-     docker build -t l9859-project .
-     ```
-
-3. **Running the script:**
-
-   - Run the main script:
-     ```bash
-     docker run -v host_directory:/app/plots ska-project
-     ```
-        - Replace `host_directory` with the path to the directory where you want to save the plots, for example: `/path/to/plots` and all the images will be saved into a folder named `plots`, information acompanying will be in the terminal output.
-
-
 ## Documentation
 The documentation can be accessed [here](https://rv-detection-of-l98-59.readthedocs.io/en/latest/) or generated locally using the following steps:
 
@@ -122,6 +93,35 @@ The documentation can be accessed [here](https://rv-detection-of-l98-59.readthed
       ```bash
        pytest
      ```
+
+## Running the L98-59 Model on Docker
+
+### Setting Up the Project
+
+1. **Clone the repository:**
+   - Shallow clone the repository from GitLab:
+     ```bash
+     git clone --depth 1 git@gitlab.developers.cam.ac.uk:phy/data-intensive-science-mphil/projects/mt942.git
+     ```
+
+2. **Build the Docker image:**
+    - Navigate to the project directory:
+      ```bash
+      cd mt942
+      ```
+   - Build image:
+     ```bash
+     docker build -t l9859-project .
+     ```
+
+3. **Running the script:**
+
+   - Run the main script:
+     ```bash
+     docker run -it --rm -v /Users/maxtalberg/projecty:/app/plots l9859-project
+     ```
+        - Replace `host_directory` with the path to the directory where you want to save the plots, for example: `/path/to/plots` and all the images will be saved into a folder named `plots`, information acompanying will be in the terminal output.
+
 
 ## License
 
