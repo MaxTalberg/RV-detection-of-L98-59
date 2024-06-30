@@ -35,4 +35,4 @@ COPY . /app
 ENV NAME l9859-env
 
 # Run main.py when the container launches
-CMD ["python", "src/main.py"]
+CMD ["conda", "run", "-n", "l9859-env", "python", "src/main.py"]
