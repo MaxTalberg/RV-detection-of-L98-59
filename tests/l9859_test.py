@@ -12,7 +12,7 @@ from pickle_data import unpickle_data
 
 class TestL9859(unittest.TestCase):
     """
-    Unit tests for the L98-59 model class, ensuring that initialization and settings
+    Unit tests for the L98-59 model class, ensuring that initialisation and settings
     are correctly applied and verifying the behavior of its setup.
     """
 
@@ -25,7 +25,7 @@ class TestL9859(unittest.TestCase):
         Parameters
         ----------
         mock_load_data : unittest.mock.patch
-            Patch for the `load_data` method to prevent actual data loading during initialization.
+            Patch for the `load_data` method to prevent actual data loading during initialsation.
         """
         # Initialise the L9859Analysis object with predefined parameters and mocks
         self.analysis = L9859Analysis(

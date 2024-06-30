@@ -295,7 +295,7 @@ class L9859Analysis:
 
         This method sets up a QP kernel by combining an exponential sine-squared kernel
         (periodic kernel) with an exponential squared kernel (decay kernel). It then
-        initializes GP models for RV, FWHM, and S-index data based on the inclusion flags.
+        initialises GP models for RV, FWHM, and S-index data based on the inclusion flags.
 
         Raises
         ------
@@ -316,12 +316,12 @@ class L9859Analysis:
             decay_kernel = kernels.ExpSquaredKernel(metric=length_scale)
             self.qp_kernel = periodic_kernel * decay_kernel
 
-            # Initialize the main GP model with the QP kernel
+            # Initialise the main GP model with the QP kernel
             self.gp = george.GP(self.qp_kernel)
             self.gp_fwhm = None
             self.gp_sindex = None
 
-            # Initialize additional GP models for FWHM and S-index if included
+            # Initialise additional GP models for FWHM and S-index if included
             if self.include_fwhm:
                 self.gp_fwhm = george.GP(self.qp_kernel)
             if self.include_sindex:
@@ -392,14 +392,14 @@ class L9859Analysis:
             If there is an error in computing the RV model.
         """
         try:
-            # Initialize the total RV array
+            # Initialise the total RV array
             RV_total = np.zeros(len(T0))
 
             # Derive parameters from the input vector
             self.derive_params(q)
 
             if self.include_planet_b:
-                # Initialize RadVel parameters for 3 planets (b, c, d)
+                # Initialise RadVel parameters for 3 planets (b, c, d)
                 radvel_params = radvel.Parameters(
                     3, basis="per tc e w k", planet_letters={1: "b", 2: "c", 3: "d"}
                 )
@@ -426,7 +426,7 @@ class L9859Analysis:
                 radvel_params["k3"] = radvel.Parameter(value=q[self.Q["K_d"]])
 
             else:
-                # Initialize RadVel parameters for 2 planets (c, d)
+                # Initialise RadVel parameters for 2 planets (c, d)
                 radvel_params = radvel.Parameters(
                     2, basis="per tc e w k", planet_letters={1: "c", 2: "d"}
                 )
@@ -445,7 +445,7 @@ class L9859Analysis:
                 radvel_params["w2"] = radvel.Parameter(value=q[self.Q["w_d"]])
                 radvel_params["k2"] = radvel.Parameter(value=q[self.Q["K_d"]])
 
-            # Initialize RadVel RV model with the defined parameters
+            # Initialise RadVel RV model with the defined parameters
             model = radvel.RVModel(radvel_params)
 
             # Compute the total RV signal by evaluating the model at the observation times
@@ -644,7 +644,7 @@ class L9859Analysis:
             If there is an error in computing the mean model.
         """
         try:
-            # Initialize mean model arrays for RV, FWHM, and S-index
+            # Initialise mean model arrays for RV, FWHM, and S-index
             Y0 = np.zeros(T0.shape)
             Y1 = np.zeros(self.adjusted_time_FWHM.shape) if self.include_fwhm else None
             Y2 = np.zeros(T0.shape) if self.include_sindex else None
