@@ -4,10 +4,9 @@ FROM continuumio/miniconda3
 # Set the working directory to /app
 WORKDIR /app
 
-# Install system packages required for PolyChord and other compilations
+# Update the repository sources list and install build tools
 RUN apt-get update && apt-get install -y \
-    git \
-    build-essential  # includes gcc, g++ and make
+    build-essential  # This will install gcc, g++ and make
 
 # Copy the current directory contents into the container at /app
 COPY . /app
@@ -22,9 +21,8 @@ SHELL ["conda", "run", "-n", "l9859-env", "/bin/bash", "-c"]
 # Install PolyChord from source
 RUN git clone https://github.com/PolyChord/PolyChordLite.git \
     && cd PolyChordLite \
-    && python setup.py install \
-    && cd .. \
-    && rm -rf PolyChordLite
+    && make \
+    && pip install .
 
 # Define environment variable
 ENV NAME l9859-env
