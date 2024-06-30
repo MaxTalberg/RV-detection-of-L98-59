@@ -5,24 +5,31 @@ FROM continuumio/miniconda3
 WORKDIR /app
 
 # Update the repository sources list and install build tools
+# It's a good practice to clean up the apt cache by removing /var/lib/apt/lists
+# This reduces the image size since the cache is not stored in the layer
 RUN apt-get update && apt-get install -y \
-    build-essential  \
-    gfortran
+    build-essential \
+    gfortran \
+ && rm -rf /var/lib/apt/lists/*
 
-# Copy the current directory contents into the container at /app
-COPY . /app
-
-# Install any needed packages specified in environment.yml
-COPY environment.yml /app/environment.yml
+# Copy only the environment.yml initially to avoid cache invalidation by other file changes
+COPY environment.yml /app/
 RUN conda env create -f environment.yml
 
 # Make RUN commands use the new environment:
 SHELL ["conda", "run", "-n", "l9859-env", "/bin/bash", "-c"]
 
+# Copy the current directory contents into the container at /app
+# Doing this after environment setup utilizes Docker cache layers more efficiently
+COPY . /app
+
 # Install PolyChord from source
 RUN git clone https://github.com/PolyChord/PolyChordLite.git
-RUN cd PolyChordLite && make
+RUN cd PolyChordLite
+RUN make
 RUN pip install .
+RUN cd ..
+RUN rm -rf PolyChordLite
 
 # Define environment variable
 ENV NAME l9859-env
