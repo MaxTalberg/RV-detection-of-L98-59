@@ -1,53 +1,47 @@
-# Use an official Ubuntu as a parent image
-FROM ubuntu:20.04
-
-# Set non-interactive installation mode, to avoid getting prompted
-ENV DEBIAN_FRONTEND=noninteractive
+# Use an official Ubuntu runtime as a parent image
+FROM ubuntu
 
 # Set the working directory to /app
 WORKDIR /app
 
 # Install system packages required by Miniconda and PolyChord
-# Install system packages required by Miniconda and PolyChord
+# Including gcc, gfortran for PolyChord, and git to clone the repository
 RUN apt-get update && apt-get install -y \
     wget \
     bzip2 \
-    build-essential \ # Includes gcc, g++ and make
+    build-essential \
     gfortran \
-    gcc \ # Explicitly installing gcc
     git \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Install Miniconda
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh \
-    && bash miniconda.sh -b -p /miniconda \
-    && rm miniconda.sh
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh \
+    && /bin/bash ~/miniconda.sh -b -p /opt/conda \
+    && rm ~/miniconda.sh \
+    && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
+    && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
+    && echo "conda activate base" >> ~/.bashrc
 
-# Add conda to PATH
-ENV PATH=/miniconda/bin:$PATH
+# Copy the environment.yml file to container
+COPY environment.yml /app/environment.yml
 
-# Copy the environment.yml file to the container
-COPY environment.yml /app/
+# Create the conda environment
+RUN /opt/conda/bin/conda env create -f environment.yml
 
-# Create the Conda environment
-RUN conda env create -f environment.yml
-
-# Make RUN commands use the new environment
+# Activate the environment and configure the shell
 SHELL ["conda", "run", "-n", "l9859-env", "/bin/bash", "-c"]
-
-# Copy the rest of your app's source code from the local directory to /app inside the container
-COPY . /app
 
 # Install PolyChord from source
 RUN git clone https://github.com/PolyChord/PolyChordLite.git \
     && cd PolyChordLite \
     && make \
-    && pip install . \
     && cd .. \
-    && rm -rf PolyChordLite
+    && pip install .
 
-# Define environment variable to be used in your application
+# Copy the remaining directory contents into the container at /app
+COPY . /app
+
+# Define environment variable
 ENV NAME l9859-env
 
 # Run main.py when the container launches
