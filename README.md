@@ -53,6 +53,7 @@ The Data Analysis Pipeline contains the code to preprocess and produce periodogr
         pip install .
         cd ..
         ```
+
 3. **Running the script:**
 
    - Running the main script to preprocess and produce periodograms from the HARPS and ESPRESSO datasets:
@@ -64,14 +65,14 @@ The Data Analysis Pipeline contains the code to preprocess and produce periodogr
         python src/run_l9859.py
         ```
 
-## Running the script on Docker
+## Running the L98-59 Model on Docker
 
 ### Setting Up the Project
 
 1. **Clone the repository:**
-   - Clone the repository from GitLab:
+   - Shallow clone the repository from GitLab:
      ```bash
-     git clone git@gitlab.developers.cam.ac.uk:phy/data-intensive-science-mphil/A1_SKA_Assessment/mt942.git
+     git clone --depth 1 git@gitlab.developers.cam.ac.uk:phy/data-intensive-science-mphil/projects/mt942.git
      ```
 
 2. **Build the Docker image:**
