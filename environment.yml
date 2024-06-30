@@ -1,4 +1,4 @@
-name: l9859-env-test-fin
+name: l9859-env-testing
 channels:
   - conda-forge
   - defaults
