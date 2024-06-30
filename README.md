@@ -90,11 +90,12 @@ The documentation can be accessed [here](https://rv-detection-of-l98-59.readthed
 
 1. **Navigate to the project directory `tests`:**
       ```bash
-       cd tests
+       cd ../tests
      ```
 2. **Run the tests:**
 
       ```bash
+       export JUPYTER_PLATFORM_DIRS=1
        pytest
      ```
 
