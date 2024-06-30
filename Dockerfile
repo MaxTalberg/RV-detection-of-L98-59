@@ -1,37 +1,53 @@
-# Use an official Miniconda runtime as a parent image
-FROM continuumio/miniconda3
+# Use an official Ubuntu as a parent image
+FROM ubuntu:20.04
+
+# Set non-interactive installation mode, to avoid getting prompted
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Set the working directory to /app
 WORKDIR /app
 
-# Update the repository sources list and install build tools
-# It's a good practice to clean up the apt cache by removing /var/lib/apt/lists
-# This reduces the image size since the cache is not stored in the layer
+# Install system packages required by Miniconda and PolyChord
+# Install system packages required by Miniconda and PolyChord
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    wget \
+    bzip2 \
+    build-essential \ # Includes gcc, g++ and make
     gfortran \
- && rm -rf /var/lib/apt/lists/*
+    gcc \ # Explicitly installing gcc
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy only the environment.yml initially to avoid cache invalidation by other file changes
+
+# Install Miniconda
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh \
+    && bash miniconda.sh -b -p /miniconda \
+    && rm miniconda.sh
+
+# Add conda to PATH
+ENV PATH=/miniconda/bin:$PATH
+
+# Copy the environment.yml file to the container
 COPY environment.yml /app/
+
+# Create the Conda environment
 RUN conda env create -f environment.yml
 
-# Make RUN commands use the new environment:
+# Make RUN commands use the new environment
 SHELL ["conda", "run", "-n", "l9859-env", "/bin/bash", "-c"]
 
-# Copy the current directory contents into the container at /app
-# Doing this after environment setup utilizes Docker cache layers more efficiently
+# Copy the rest of your app's source code from the local directory to /app inside the container
 COPY . /app
 
 # Install PolyChord from source
-RUN git clone https://github.com/PolyChord/PolyChordLite.git
-RUN cd PolyChordLite
-RUN make
-RUN pip install .
-RUN cd ..
-RUN rm -rf PolyChordLite
+RUN git clone https://github.com/PolyChord/PolyChordLite.git \
+    && cd PolyChordLite \
+    && make \
+    && pip install . \
+    && cd .. \
+    && rm -rf PolyChordLite
 
-# Define environment variable
+# Define environment variable to be used in your application
 ENV NAME l9859-env
 
 # Run main.py when the container launches
