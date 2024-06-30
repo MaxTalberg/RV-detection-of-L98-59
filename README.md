@@ -29,7 +29,7 @@ The Data Analysis Pipeline contains the code to preprocess and produce periodogr
 1. **Clone the repository:**
    - Clone the repository from GitLab:
      ```bash
-     git clone git@gitlab.developers.cam.ac.uk:phy/data-intensive-science-mphil/projects/mt942.git
+     git clone --depth 1 git@gitlab.developers.cam.ac.uk:phy/data-intensive-science-mphil/projects/mt942.git
      ```
 
 2. **Set up the virtual environment:**
