@@ -1,4 +1,4 @@
-name: l9859-env
+name: L9859-env
 channels:
   - conda-forge
   - defaults
@@ -162,4 +162,4 @@ dependencies:
       - wcwidth==0.2.13
       - webencodings==0.5.1
       - zipp==3.19.1
-prefix: /Users/maxtalberg/miniconda3/envs/l9859-env
+prefix: /Users/maxtalberg/miniconda3/envs/L9859-env
