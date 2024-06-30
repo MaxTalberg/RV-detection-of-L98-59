@@ -88,7 +88,11 @@ The documentation can be accessed [here](https://rv-detection-of-l98-59.readthed
 
 ### Running Unit Tests
 
-1. **Navigate to the project directory `mt942 and run Unit Tests:**
+1. **Navigate to the project directory `tests`:**
+      ```bash
+       cd tests
+     ```
+2. **Run the tests:**
 
       ```bash
        pytest
@@ -118,9 +122,9 @@ The documentation can be accessed [here](https://rv-detection-of-l98-59.readthed
 
    - Run the main script:
      ```bash
-     docker run -it --rm -v /Users/maxtalberg/projecty:/app/plots l9859-project
+     docker run -it --rm -v host_directory:/app/plots l9859-project
      ```
-        - Replace `host_directory` with the path to the directory where you want to save the plots, for example: `/path/to/plots` and all the images will be saved into a folder named `plots`, information acompanying will be in the terminal output.
+        - Replace `host_directory` with the path to the directory where you want to save the plots, for example: `/path/to/plots` and all the images will be saved into a folder named `plots`, acompanying information will be in the terminal output.
 
 
 ## License
