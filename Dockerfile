@@ -1,5 +1,23 @@
-# Use an official Miniconda runtime as a parent image
-FROM continuumio/miniconda3
+# Start with a base Ubuntu image
+FROM ubuntu:20.04
+
+# Set noninteractive installation to avoid getting stuck at prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update and install necessary packages
+RUN apt-get update && apt-get install -y \
+    wget \
+    git \
+    bzip2 \
+    build-essential  # This might be necessary for compiling things like PolyChord
+
+# Install Miniconda
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /miniconda.sh \
+    && bash /miniconda.sh -b -p /opt/conda \
+    && rm /miniconda.sh
+
+# Add Conda to PATH
+ENV PATH="/opt/conda/bin:${PATH}"
 
 # Set the working directory to /app
 WORKDIR /app
