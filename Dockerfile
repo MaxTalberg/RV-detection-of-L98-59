@@ -1,45 +1,31 @@
-# Use an official Ubuntu runtime as a parent image
-FROM ubuntu
+# Use an official Miniconda runtime as a parent image
+FROM continuumio/miniconda3
 
 # Set the working directory to /app
 WORKDIR /app
 
-# Install system packages required by Miniconda and PolyChord
-# Including gcc, gfortran for PolyChord, and git to clone the repository
+# Update the repository sources list and install build tools
+# It's a good practice to clean up the apt cache by removing /var/lib/apt/lists
+# This reduces the image size since the cache is not stored in the layer
 RUN apt-get update && apt-get install -y \
-    wget \
-    bzip2 \
     build-essential \
     gfortran \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+    gcc \
+ && rm -rf /var/lib/apt/lists/*
 
-# Install Miniconda
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh \
-    && /bin/bash ~/miniconda.sh -b -p /opt/conda \
-    && rm ~/miniconda.sh \
-    && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
-    && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
-    && echo "conda activate base" >> ~/.bashrc
+# Copy only the environment.yml initially to avoid cache invalidation by other file changes
+COPY environment.yml /app/
+RUN conda env create -f environment.yml
 
-# Copy the environment.yml file to container
-COPY environment.yml /app/environment.yml
-
-# Create the conda environment
-RUN /opt/conda/bin/conda env create -f environment.yml
-
-# Activate the environment and configure the shell
+# Make RUN commands use the new environment:
 SHELL ["conda", "run", "-n", "l9859-env", "/bin/bash", "-c"]
 
-# Install PolyChord from source
-RUN git clone https://github.com/PolyChord/PolyChordLite.git \
-    && cd PolyChordLite \
-    && make \
-    && cd .. \
-    && pip install .
-
-# Copy the remaining directory contents into the container at /app
+# Copy the current directory contents into the container at /app
+# Doing this after environment setup utilizes Docker cache layers more efficiently
 COPY . /app
+
+# Install PolyChord from source
+RUN git clone https://github.com/PolyChord/PolyChordLite.git
 
 # Define environment variable
 ENV NAME l9859-env
