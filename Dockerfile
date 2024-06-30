@@ -1,29 +1,38 @@
 # Use an official Miniconda runtime as a parent image
-FROM continuumio/miniconda3:4.10.3
+FROM continuumio/miniconda3
 
 # Set the working directory to /app
 WORKDIR /app
 
+# Copy the environment.yml file into the container at /app
+COPY environment.yml /app/environment.yml
+
+# Update the repository sources list, install build tools, and adjust permissions
 RUN apt-get update && apt-get install -y \
     build-essential \
     gfortran \
-    libopenblas-dev \
-    liblapack-dev \
-    git
+ && rm -rf /var/lib/apt/lists/* \
+ && chmod -R 777 /app  # Adjust permissions
 
-COPY . /app
+# Create the Conda environment
+RUN conda env create -f environment.yml
 
-RUN conda env create -f /app/environment.yml
-
-# Make RUN commands use the new environment:
+# Set the SHELL to use the new environment
 SHELL ["conda", "run", "-n", "l9859-env", "/bin/bash", "-c"]
 
-# Ensure Python output is set straight to the terminal without buffering
-ENV PYTHONUNBUFFERED=1
-# Copy the current directory contents into the container at /app
+# Copy the rest of your application into the container at /app
+COPY . /app
+
+# Install PolyChord from source if necessary
+# RUN git clone https://github.com/PolyChord/PolyChordLite.git \
+#     && cd PolyChordLite \
+#     && make \
+#     && pip install . \
+#     && cd .. \
+#     && rm -rf PolyChordLite
 
 # Define environment variable
 ENV NAME l9859-env
 
 # Run main.py when the container launches
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "l9859-env", "python", "/app/src/main.py"]
+CMD ["python", "src/main.py"]
