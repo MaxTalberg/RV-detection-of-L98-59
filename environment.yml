@@ -1,4 +1,4 @@
-name: l9859-env-test-three
+name: l9859-env-test-fin
 channels:
   - conda-forge
   - defaults

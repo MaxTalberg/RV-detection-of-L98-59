@@ -1025,7 +1025,9 @@ class L9859Analysis:
                 self.include_planet_b, self.include_fwhm, self.include_sindex
             )
             pickle_file_name = os.path.join(self.output_directory, pickle_file_name)
-            print(f"L98-59 model with planet b {self.include_planet_b}, FWHM {self.include_fwhm}, S-index {self.include_sindex}")
+            print(
+                f"L98-59 model with planet b {self.include_planet_b}, FWHM {self.include_fwhm}, S-index {self.include_sindex}"
+            )
             print("Finshed running in: {self.runtime}")
             print(f"Saving results to {self.output_directory, pickle_file_name}")
             print(f"Saving plots to {self.output_directory, plot_path}")
