@@ -6,7 +6,8 @@ WORKDIR /app
 
 # Update the repository sources list and install build tools
 RUN apt-get update && apt-get install -y \
-    build-essential  # This will install gcc, g++ and make
+    build-essential  \
+    gfortran
 
 # Copy the current directory contents into the container at /app
 COPY . /app
