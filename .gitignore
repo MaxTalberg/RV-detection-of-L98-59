@@ -23,6 +23,12 @@ src/L98_59_aldo/
 src/__pycache__/
 L98_59_aldo/
 output_dir/
+chains/
+src/*.pyc
+src.*ipynb
+src/*.log
+src/*.txt
+
 
 # output.txt
 output.txt
